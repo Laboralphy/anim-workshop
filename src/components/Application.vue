@@ -12,7 +12,14 @@
         ></MainMenu>
         <v-content>
             <v-container fluid>
-                Hello World
+                <v-layout row wrap>
+                    <v-flex xs6 sm7 md8 lg8>
+                        <MainScreen></MainScreen>
+                    </v-flex>
+                    <v-flex xs6 sm5 md4 lg4>
+                        XXX
+                    </v-flex>
+                </v-layout>
             </v-container>
         </v-content>
         <v-footer></v-footer>
@@ -21,9 +28,10 @@
 
 <script>
     import MainMenu from "./MainMenu.vue";
+    import MainScreen from "./MainScreen.vue";
     export default {
         name: "Application",
-        components: {MainMenu},
+        components: {MainScreen, MainMenu},
 
         data: function() {
             return {
