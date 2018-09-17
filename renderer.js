@@ -2,5 +2,4 @@
 // be executed in the renderer process for that window.
 // All of the Node.js APIs are available in this process.
 const APP = require('./app/app').default;
-console.log(APP);
 const vueApplication = APP.createApplication();

@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack && electron .",
-    "build": "webpack"
+    "build": "webpack",
+    "watch": "webpack --watch"
   },
   "repository": {
     "type": "git",
@@ -22,8 +23,10 @@
   "devDependencies": {
     "css-loader": "^1.0.0",
     "electron": "^2.0.9",
+    "file-loader": "^2.0.0",
     "source-map-loader": "^0.2.4",
     "style-loader": "^0.23.0",
+    "url-loader": "^1.1.1",
     "vue-html-loader": "^1.2.4",
     "vue-loader": "^15.4.2",
     "vue-template-compiler": "^2.5.17",
@@ -34,6 +37,7 @@
   "dependencies": {
     "mdi": "^2.2.43",
     "vue": "^2.5.17",
+    "vuetify": "^1.2.3",
     "vuex": "^3.0.1"
   }
 }
