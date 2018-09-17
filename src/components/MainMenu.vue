@@ -15,8 +15,8 @@
         <v-list dense class="pt-0">
             <v-list-tile
                     v-for="item in items"
-                    :key="item.title"
-                    @click=""
+                    :key="item.id"
+                    @click="optionClicked(item.id)"
             >
                 <v-list-tile-action>
                     <v-icon>{{ item.icon }}</v-icon>
@@ -40,6 +40,12 @@
             return {
                 bVisible: false
             };
+        },
+
+        methods: {
+            optionClicked: function(id) {
+                this.$emit('select', {id});
+            }
         }
     }
 </script>

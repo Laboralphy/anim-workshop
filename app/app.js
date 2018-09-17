@@ -119,7 +119,7 @@ exports = module.exports = __webpack_require__(/*! ../../node_modules/css-loader
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -138,7 +138,7 @@ exports = module.exports = __webpack_require__(/*! ../../node_modules/css-loader
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -1438,6 +1438,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -1448,9 +1450,11 @@ __webpack_require__.r(__webpack_exports__);
         return {
             title: 'Accueil',
             items: [{
+                id: 100,
                 title: 'Nouveau film',
                 icon: 'mdi-folder-plus'
             }, {
+                id: 101,
                 title: 'Ouvrir film',
                 icon: 'mdi-folder-open'
             }]
@@ -1463,6 +1467,15 @@ __webpack_require__.r(__webpack_exports__);
          */
         mmToggle: function() {
             this.$refs.o_main_menu.bVisible = !this.$refs.o_main_menu.bVisible;
+        },
+
+        /**
+         * une option du menu principal à été selectionnée
+         * @param id {number|string} identifiant de l'option
+         */
+        mmSelected: function({id}) {
+            console.log('option selected', id);
+            this.mmToggle();
         }
     }
 });
@@ -1521,6 +1534,12 @@ __webpack_require__.r(__webpack_exports__);
         return {
             bVisible: false
         };
+    },
+
+    methods: {
+        optionClicked: function(id) {
+            this.$emit('select', {id});
+        }
     }
 });
 
@@ -1571,7 +1590,8 @@ var render = function() {
       _vm._v(" "),
       _c("MainMenu", {
         ref: "o_main_menu",
-        attrs: { title: "Menu", items: _vm.items }
+        attrs: { title: "Menu", items: _vm.items },
+        on: { select: _vm.mmSelected }
       }),
       _vm._v(" "),
       _c(
@@ -1659,7 +1679,14 @@ var render = function() {
         _vm._l(_vm.items, function(item) {
           return _c(
             "v-list-tile",
-            { key: item.title, on: { click: function($event) {} } },
+            {
+              key: item.id,
+              on: {
+                click: function($event) {
+                  _vm.optionClicked(item.id)
+                }
+              }
+            },
             [
               _c(
                 "v-list-tile-action",
