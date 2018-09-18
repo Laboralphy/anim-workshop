@@ -10,8 +10,8 @@
                 <v-flex xs4 v-for="f in getFrames()" :key="f.id">
                     <v-card flat tile>
                         <v-img
-                                :src="f.src"
-                                height="128px"
+                            :src="f.src"
+                            height="128px"
                         ></v-img>
                     </v-card>
                 </v-flex>
