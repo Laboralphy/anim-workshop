@@ -16,8 +16,8 @@
                     <v-flex xs6 sm7 md8 lg8>
                         <MainScreen></MainScreen>
                     </v-flex>
-                    <v-flex xs6 sm5 md4 lg4>
-                        XXX
+                    <v-flex xs6 sm5 md4 lg4 pl-2>
+                        <Album></Album>
                     </v-flex>
                 </v-layout>
             </v-container>
@@ -29,9 +29,10 @@
 <script>
     import MainMenu from "./MainMenu.vue";
     import MainScreen from "./MainScreen.vue";
+    import Album from "./Album.vue";
     export default {
         name: "Application",
-        components: {MainScreen, MainMenu},
+        components: {Album, MainScreen, MainMenu},
 
         data: function() {
             return {
