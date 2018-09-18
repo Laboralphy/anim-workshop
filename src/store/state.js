@@ -4,8 +4,10 @@ export default {
      * {
      *     id: number,
      *     src: string,
+     *     selected: boolean
      * }
      */
     frames: [],
-    lastFrameId: 1
+    lastFrameId: 1,
+    error: ''
 }

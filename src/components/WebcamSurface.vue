@@ -49,7 +49,6 @@
                     this.width = m.width;
                     this.height = m.height;
                 } catch (e) {
-                    console.error(e);
                     this.$emit('error', {error: e});
                 }
             },
