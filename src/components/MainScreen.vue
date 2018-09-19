@@ -1,15 +1,15 @@
 <template>
-    <v-card flat>
+    <v-card>
         <v-layout row wrap>
             <v-flex xs12>
                 <v-tabs
                         v-model="active"
-                        slider-color="#44FF44"
+                        slider-color="#4F4"
                 >
                     <v-tab :key="1" ripple>Caméra</v-tab>
                     <v-tab :key="2" ripple>Snapshot</v-tab>
                     <v-tab-item :key="1">
-                        <WebcamSurface :class="flash ? 'flash' : ''" ref="o_wcs" res="480" aspect="4:3"></WebcamSurface>
+                        <WebcamSurface @error="wcsError" :class="flash ? 'flash' : ''" ref="o_wcs" res="480" aspect="4:3"></WebcamSurface>
                     </v-tab-item>
                     <v-tab-item :key="2">
                         <PhotoSurface :class="flash ? 'flash' : ''" ref="o_photo"></PhotoSurface>
@@ -23,9 +23,6 @@
                     <v-spacer></v-spacer>
                     <v-btn icon @click="takePicture()">
                         <v-icon>mdi-camera</v-icon>
-                    </v-btn>
-                    <v-btn icon>
-                        <v-icon>mdi-undo</v-icon>
                     </v-btn>
                 </v-card-actions>
             </v-flex>
@@ -51,7 +48,8 @@
         methods: {
 
             ...mapActions([
-                'addFrame'
+                'addFrame',
+                'showError'
             ]),
 
             /**
@@ -71,10 +69,22 @@
                 oWcs.capture(oCanvas);
                 this.triggerFlash();
                 return this.addFrame({data: oCanvas.toDataURL('image/jpeg')});
-            }
-        },
-        mounted: function() {
+            },
 
+            /**
+             * Une erreur est survenue lors de l'initialisation de la webcam
+             * @param err {Error}
+             */
+            wcsError: function({error}) {
+                let sExtraMessage = error.message || '(information non disponible)';
+                let sBaseMessage = error.name;
+                let sMsg = ([
+                    'Erreur d\'initialisation Webcam',
+                    sBaseMessage,
+                    sExtraMessage
+                ]).filter(s => !!s).join(' - ');
+                this.showError({caption: sMsg});
+            }
         }
     }
 </script>

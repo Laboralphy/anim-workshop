@@ -38,5 +38,5 @@ module.exports = {
     plugins: [
         new VueLoaderPlugin()
     ],
-    target: 'web'
+    target: 'electron-main'
 };

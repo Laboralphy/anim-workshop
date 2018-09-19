@@ -3,7 +3,7 @@
 </template>
 
 <script>
-    import wcs from '../libraries/snapshot';
+    import wcs from '../services/snapshot';
     export default {
         name: "WebcamSurface",
         props: ['res', 'aspect'],
@@ -49,7 +49,6 @@
                     this.width = m.width;
                     this.height = m.height;
                 } catch (e) {
-                    console.error(e);
                     this.$emit('error', {error: e});
                 }
             },

@@ -9,7 +9,9 @@ import 'mdi/css/materialdesignicons.min.css';
 import colors from 'vuetify/es5/util/colors';
 
 Vue.use(Vuex);
-Vue.use(Vuetify);
+Vue.use(Vuetify, {
+    iconfont: 'mdi'
+});
 
 function createApplication() {
     const app = new Vue({
