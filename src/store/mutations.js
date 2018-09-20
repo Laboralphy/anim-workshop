@@ -1,27 +1,5 @@
 import * as types from './types';
 
-
-/**
- * le predicat doit renvoyer une instance différente de l'objet spécifié afinde valider le remplacement
- * ou bien renvouer null, pour commander la suppression de l'objet
- * ou bien renvoyer le même objet, dans ce cas aucun changement n'est effectué
- * @param aArray
- * @param pPredicate
- */
-function mutationFilter(aArray, pPredicate) {
-    for (let i = aArray.length - 1; i >= 0; --i) {
-        let item = aArray[i];
-        let newItem = pPredicate(item);
-        if (newItem !== item) {
-            aArray.splice(i, 1, item);
-        }
-        if (!newItem) {
-            aArray.splice(i, 1);
-        }
-    }
-}
-
-
 export default {
     /**
      * Ajoute une nouvelle frame à l'album
@@ -38,11 +16,11 @@ export default {
 
     [types.SHOW_ALERT]: function(state, {message, type}) {
         let sa = state.alerts;
-        while (sa.length > 4) {
+        while (sa.length > 2) {
             sa.shift();
         }
         sa.push({
-            type: type,
+            type,
             message,
             id: state.lastAlertId++
         });
@@ -50,26 +28,47 @@ export default {
 
 
     [types.SELECT_FRAME]: function(state, {id}) {
-        let iFrame = state.frames.findIndex(f => f.id === id);
+        let sf = state.frames;
+        let iFrame = sf.findIndex(f => f.id === id);
         if (iFrame >= 0) {
-            let oFrame = state.frames[iFrame];
+            let oFrame = sf[iFrame];
             oFrame.selected = !oFrame.selected;
-            state.frames.splice(iFrame, 1, oFrame);
+            sf.splice(iFrame, 1, oFrame);
         } else {
             throw new Error('could not locate frame #' + id);
         }
     },
 
     [types.DELETE_SELECTED_FRAMES]: function(state) {
-        mutationFilter(state.frames, f => f.selected ? null : f);
+        let sf = state.frames;
+        for (let i = sf.length - 1; i >= 0; --i) {
+            let f = sf[i];
+            if (f.selected) {
+                sf.splice(i, 1);
+            }
+        }
     },
 
     [types.SELECT_ALL_FRAMES]: function(state) {
-        mutationFilter(state.frames, f => !f.selected ? { ...f, selected: true } : f);
+        let sf = state.frames;
+        for (let i = sf.length - 1; i >= 0; --i) {
+            let f = sf[i];
+            if (!f.selected) {
+                f.selected = true;
+                sf.splice(i, 1, f);
+            }
+        }
     },
 
     [types.UNSELECT_ALL_FRAMES]: function(state) {
-        mutationFilter(state.frames, f => f.selected ? { ...f, selected: false } : f);
+        let sf = state.frames;
+        for (let i = sf.length - 1; i >= 0; --i) {
+            let f = sf[i];
+            if (f.selected) {
+                f.selected = false;
+                sf.splice(i, 1, f);
+            }
+        }
     },
 
     [types.CLEAR_FRAMES]: function(state) {

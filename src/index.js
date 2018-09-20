@@ -10,7 +10,7 @@ import 'mdi/css/materialdesignicons.min.css';
 import colors from 'vuetify/es5/util/colors';
 
 import Workspace from './components/Workspace.vue';
-import Toto from './components/Toto.vue';
+import Splash from './components/Splash.vue';
 
 Vue.use(Vuex);
 Vue.use(Vuetify, {
@@ -21,8 +21,8 @@ Vue.use(VueRouter);
 function createApplication() {
 
     const routes = [
-        {path: "/", component: Workspace},
-        {path: "/toto", component: Toto},
+        {path: "/", component: Splash},
+        {path: "/workspace", component: Workspace},
     ];
 
     const app = new Vue({
@@ -38,7 +38,6 @@ function createApplication() {
         },
 
         mounted: function() {
-            console.log('mounted');
         }
     });
     return app;

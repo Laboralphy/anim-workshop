@@ -32,7 +32,11 @@
                         height="7em"
                         @click="phToggleSelect(f.id)"
                         :class="'photo ' + (f.selected ? 'selected' : '')"
-                    ></v-img>
+                    >
+                        <v-btn icon :small="needSmallViewButtons" @click.stop="viewClicked(f)">
+                            <v-icon :small="needSmallViewButtons">mdi-eye</v-icon>
+                        </v-btn>
+                    </v-img>
                 </v-flex>
             </v-layout>
         </v-container>
@@ -73,7 +77,17 @@
             };
         },
         computed: {
-            ...mapGetters(['getFrames', 'getFrame', 'isFrameSelected', 'getSelectedFrames']),
+            ...mapGetters([
+                'getFrames',
+                'getFrame',
+                'isFrameSelected',
+                'getSelectedFrames'
+            ]),
+
+            needSmallViewButtons: function() {
+                let n = this.$vuetify.breakpoint.name;
+                return n === 'xs' || n === 'sm' || n === 'md' || n === 'lg';
+            },
 
             /**
              * Nombre de frames dans l'album
@@ -91,7 +105,10 @@
         },
         methods: {
 
-            ...mapActions([types.SELECT_ALL_FRAMES, types.UNSELECT_ALL_FRAMES]),
+            ...mapActions([
+                types.SELECT_ALL_FRAMES,
+                types.UNSELECT_ALL_FRAMES
+            ]),
 
             /**
              * On a cliqué sur le bouton de génération de film
@@ -110,6 +127,15 @@
             phToggleSelect: function(id) {
                 this.$store.dispatch(types.SELECT_FRAME, {id});
             },
+
+            viewClicked: function(oFrame) {
+                // copier l'image dans la vue snapshot
+                let oImage = new Image();
+                oImage.addEventListener('load', () => {
+                    this.$emit('view-frame', {id: oFrame.id, image: oImage});
+                });
+                oImage.src = oFrame.src;
+            }
         }
     }
 </script>

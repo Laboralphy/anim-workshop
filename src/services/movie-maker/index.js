@@ -7,14 +7,11 @@ const path = require('path');
 const FsPlus = require('../fs-plus');
 
 
-const FILENAME_ROOT = 'frame-';
-const os = require('os');
-
-
 const fsp = new FsPlus();
 
 
 
+const FILENAME_ROOT = 'frame-';
 const PATH_HOME = fsp.home();
 const PATH_CONFIG = path.resolve(PATH_HOME, '.anim-workshop');
 
@@ -26,50 +23,6 @@ class MovieMaker {
     }
 
     /**
-     * Creation de répertoire en asynchrone
-     * Si le dossier existe déja, ne fait rien
-     * @param sDir
-     * @returns {Promise<*>}
-     */
-    mkdirp(sDir) {
-        return new Promise((resolve, reject) => {
-            mkdirp(sDir, err => {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve();
-                }
-            });
-        });
-    }
-
-
-    ls(sDir) {
-        return new Promise((resolve, reject) => {
-            fs.readdir(sDir, (err, files) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(files);
-                }
-            });
-        });
-    }
-
-    rm(files) {
-        if (Array.isArray(files)) {
-            return Promise.all(files.map(f => new Promise(resolve => {
-                fs.unlink(f, err => resolve(f));
-            })));
-        } else {
-            return new Promise(resolve => {
-                fs.unlink(files, err => resolve(files));
-            });
-        }
-    }
-
-
-    /**
      * Définition du nom du projet, entraine la création des répertoires de travails.
      * @param sName {string}
      */
@@ -77,8 +30,8 @@ class MovieMaker {
         return new Promise(async resolve => {
             this.PATH_PROJECT = path.resolve(PATH_CONFIG, 'projects', sName);
             this.PATH_FRAMES = path.resolve(this.PATH_PROJECT, 'frames');
-            await this.mkdirp(this.PATH_PROJECT);
-            await this.mkdirp(this.PATH_FRAMES);
+            await fsp.mkdirp(this.PATH_PROJECT);
+            await fsp.mkdirp(this.PATH_FRAMES);
             // supprimer toutes les frames du répertoire
             let aFiles = await fsp.ls(this.PATH_FRAMES);
             aFiles = aFiles.map(f => path.resolve(this.PATH_FRAMES, f));
@@ -130,7 +83,7 @@ class MovieMaker {
         let nZeros = (aFrames.length - 1).toString().length;
         return Promise.all(aFrames.map((f, i) =>
             this.writeImage(
-                path.resolve(this.PATH_FRAMES, 'frame-' + i.toString().padStart(nZeros, '0')),
+                path.resolve(this.PATH_FRAMES, FILENAME_ROOT + i.toString().padStart(nZeros, '0')),
                 f
             ))
         );

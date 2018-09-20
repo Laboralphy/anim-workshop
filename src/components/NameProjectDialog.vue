@@ -17,7 +17,7 @@
             <v-container>
                 <v-layout wrap>
                     <v-flex xs12>
-                        <v-text-field v_model="projectName" label="Nom du projet" required></v-text-field>
+                        <v-text-field v-model="name" label="Nom du projet" required></v-text-field>
                     </v-flex>
                 </v-layout>
             </v-container>
@@ -48,18 +48,22 @@
     export default {
         name: "NameProjectDialog",
         computed: {
+            ...mapGetters(['getProjectName'])
         },
         data: function() {
             return {
                 dialog: false,
-                projectName: ''
+                name: ''
             };
         },
         methods: {
             confirmClicked: function() {
-                this.$store.dispatch(types.SET_PROJECT_NAME, {name: this.projectName});
+                this.$store.dispatch(types.SET_PROJECT_NAME, {name: this.name});
                 this.dialog = false;
             }
+        },
+        mounted: function() {
+            this.name = this.getProjectName();
         }
     }
 </script>

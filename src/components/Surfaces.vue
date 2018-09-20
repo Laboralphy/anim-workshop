@@ -1,6 +1,6 @@
 <template>
     <v-card>
-        <v-layout row wrap>
+        <v-layout row>
             <v-flex xs12>
                 <v-tabs
                         v-model="active"
@@ -17,7 +17,7 @@
                 </v-tabs>
             </v-flex>
         </v-layout>
-        <v-layout row wrap>
+        <v-layout row>
             <v-flex xs12>
                 <v-card-actions>
                     <v-spacer></v-spacer>
@@ -58,6 +58,11 @@
             triggerFlash() {
                 this.flash = true;
                 setTimeout(() => this.flash = false, 333);
+            },
+
+            setCanvasContent: function(oImage) {
+                let oCanvas = this.$refs.o_photo.$refs.o_canvas;
+                oCanvas.getContext('2d').drawImage(oImage, 0, 0);
             },
 
             /**

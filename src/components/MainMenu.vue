@@ -15,8 +15,7 @@
         <v-list dense class="pt-0">
             <v-list-tile
                     v-for="item in items"
-                    :key="item.id"
-                    @click="optionClicked(item.id)"
+                    :key="item.title"
                     :to="item.route"
             >
                 <v-list-tile-action>
@@ -42,17 +41,14 @@
             return {
                 bVisible: false,
                 items: [{
-                    id: 'new',
                     title: 'Nouveau',
                     icon: 'mdi-folder-plus',
                     route: '/'
                 }, {
-                    id: 'load',
                     title: 'Ouvrir',
                     icon: 'mdi-folder-open',
-                    route: '/toto'
+                    route: '/workspace'
                 }, {
-                    id: 'save',
                     title: 'Enregistrer',
                     icon: 'mdi-content-save',
                     route: '/'
