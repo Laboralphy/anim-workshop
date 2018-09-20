@@ -15,23 +15,17 @@
                 @select="mmSelected"
         ></MainMenu>
         <v-content>
-            <v-alert
-                    :value="!!getError()"
-                    type="error"
-            >
-                {{ getError() }}
-            </v-alert>
-            <v-container fluid>
-                <v-layout row wrap>
-                    <v-flex xs6 sm7 md8 lg6 offset-lg1>
-                        <MainScreen></MainScreen>
-                    </v-flex>
-                    <v-flex xs6 sm5 md4 lg4 pl-2
-                        class="scroll-y">
-                        <Album @make-movie="albMakeMovie"></Album>
-                    </v-flex>
-                </v-layout>
-            </v-container>
+            <div>
+                <v-alert
+                        v-for="a in getAlerts()"
+                        :type="a.type"
+                        dismissible
+                        :key="a.id"
+                >
+                    {{ a.message }}
+                </v-alert>
+            </div>
+            <router-view></router-view>
         </v-content>
         <NameProjectDialog ref="o_rename_dlg"></NameProjectDialog>
     </v-app>
@@ -39,19 +33,20 @@
 
 <script>
     import MainMenu from "./MainMenu.vue";
-    import MainScreen from "./MainScreen.vue";
+    import Surfaces from "./Surfaces.vue";
     import Album from "./Album.vue";
-    import {mapGetters} from 'vuex';
+    import {mapGetters, mapActions} from 'vuex';
     import MovieMaker from '../services/movie-maker';
     import * as types from '../store/types';
     import NameProjectDialog from "./NameProjectDialog.vue";
 
     export default {
         name: "Application",
-        components: {NameProjectDialog, Album, MainScreen, MainMenu},
+        components: {NameProjectDialog, Album, Surfaces, MainMenu},
 
         data: function () {
             return {
+                alert: false,
                 projectName: '',
                 title: 'Atelier Animation',
                 items: [{
@@ -71,10 +66,19 @@
         },
 
         computed: {
-            ...mapGetters(['getError', 'getFrames', 'getProjectName'])
+            ...mapGetters([
+                'getErrorMessage',
+                'getFrames',
+                'getProjectName',
+                'getAlerts'
+            ])
         },
 
         methods: {
+            ...mapActions([
+                'showAlert'
+            ]),
+
             /**
              * Affiche/Cache le menu principal
              */
@@ -90,27 +94,7 @@
                 this.mmToggle();
             },
 
-            checkProjectName() {
-                if (this.getProjectName() === '') {
-                    this.$refs.o_rename_dlg.dialog = true;
-                }
-            },
-
-            albMakeMovie: async function() {
-                // déterminer le nom
-                this.checkProjectName();
-                /*
-                this.$emit('service-make-movie');
-                const mm = new MovieMaker();
-                await mm.setDirectory('.anim-workshop', 'xxx');
-                const aFrames = this.getFrames();
-                for (let iFrame = 0, nCount = aFrames.length; iFrame < nCount; ++iFrame) {
-                    await mm.addFrame(aFrames[iFrame].src);
-                    console.log('writing frame', iFrame);
-                }
-                */
-            }
-        }
+        },
     }
 </script>
 

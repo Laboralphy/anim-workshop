@@ -9,6 +9,7 @@ export default {
      */
     frames: [], // liste de toutes les frames
     lastFrameId: 1, // dernier identifiant de frame attribué
-    error: '', // message d'erreur à afficher
+    alerts: [], // collection d'alerte
+    lastAlertId: 1,
     name: '', // nom du projet
 }

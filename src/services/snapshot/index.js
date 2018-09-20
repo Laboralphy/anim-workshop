@@ -66,6 +66,7 @@ async function start(oVideo) {
 /**
  * Capture le contenu de la video dans le canvas spécifié
  * Le canvas adopte la résolution de la video
+ * @param oVideo {HTMLVideoElement}
  * @param oCanvas {HTMLCanvasElement}
  */
 function capture(oVideo, oCanvas) {

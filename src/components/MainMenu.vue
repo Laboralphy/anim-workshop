@@ -17,6 +17,7 @@
                     v-for="item in items"
                     :key="item.id"
                     @click="optionClicked(item.id)"
+                    :to="item.route"
             >
                 <v-list-tile-action>
                     <v-icon>{{ item.icon }}</v-icon>
@@ -43,15 +44,18 @@
                 items: [{
                     id: 'new',
                     title: 'Nouveau',
-                    icon: 'mdi-folder-plus'
+                    icon: 'mdi-folder-plus',
+                    route: '/'
                 }, {
                     id: 'load',
                     title: 'Ouvrir',
-                    icon: 'mdi-folder-open'
+                    icon: 'mdi-folder-open',
+                    route: '/toto'
                 }, {
                     id: 'save',
                     title: 'Enregistrer',
-                    icon: 'mdi-content-save'
+                    icon: 'mdi-content-save',
+                    route: '/'
                 }]
             };
         },

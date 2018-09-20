@@ -5,8 +5,8 @@ export default {
         commit(types.ADD_FRAME, {data});
     },
 
-    [types.SHOW_ERROR]: function({commit}, {caption}) {
-        commit(types.SHOW_ERROR, {caption});
+    [types.SHOW_ALERT]: function({commit}, {message, type}) {
+        commit(types.SHOW_ALERT, {message, type});
     },
 
     [types.SELECT_FRAME]: function({commit}, {id}) {

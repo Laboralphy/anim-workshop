@@ -1,10 +1,22 @@
+/*
+
+service de création de film
+
+ */
 const path = require('path');
-const fs = require('fs');
-const mkdirp = require('mkdirp');
+const FsPlus = require('../fs-plus');
 
 
 const FILENAME_ROOT = 'frame-';
-const PATH_HOME = require('os').homedir();
+const os = require('os');
+
+
+const fsp = new FsPlus();
+
+
+
+const PATH_HOME = fsp.home();
+const PATH_CONFIG = path.resolve(PATH_HOME, '.anim-workshop');
 
 class MovieMaker {
 
@@ -58,23 +70,28 @@ class MovieMaker {
 
 
     /**
-     * Définition du répoertoire de travail
-     * @param dirs {string}
+     * Définition du nom du projet, entraine la création des répertoires de travails.
+     * @param sName {string}
      */
-    async setDirectory(...dirs) {
+    async setProject(sName) {
         return new Promise(async resolve => {
-            this.PATH_BASE = path.resolve(this.getUserHome(), ...dirs);
-            this.PATH_FRAMES = path.resolve(this.PATH_BASE, 'frames');
-            await this.mkdirp(this.PATH_BASE);
+            this.PATH_PROJECT = path.resolve(PATH_CONFIG, 'projects', sName);
+            this.PATH_FRAMES = path.resolve(this.PATH_PROJECT, 'frames');
+            await this.mkdirp(this.PATH_PROJECT);
             await this.mkdirp(this.PATH_FRAMES);
             // supprimer toutes les frames du répertoire
-            let aFiles = await this.ls(this.PATH_FRAMES);
+            let aFiles = await fsp.ls(this.PATH_FRAMES);
             aFiles = aFiles.map(f => path.resolve(this.PATH_FRAMES, f));
-            await this.rm(aFiles);
+            await fsp.rm(aFiles);
             resolve();
         });
     }
 
+    /**
+     * Extration des donnée brute d'une image à partir de son content-url
+     * @param sData {string}
+     * @returns {*}
+     */
     extractImageRawData(sData) {
         const SEPARATOR = ',';
         let nIndex = sData.indexOf(SEPARATOR);
@@ -85,22 +102,13 @@ class MovieMaker {
         }
     }
 
-    writeBinaryFile(sFilename, sData) {
-        return new Promise((resolve, reject) => {
-            let ws = fs.createWriteStream(sFilename);
-            let oBinData = new Buffer(sData, 'base64');
-            ws.on('finish', () => resolve());
-            ws.write(oBinData);
-            ws.end();
-        });
-    }
-
     /**
-     * Réception du contenu d'une image
-     * @param src
+     * sauvegarde de l'image dans le dossier de travail
+     * @param sFilename {string}
+     * @param src {string} contenue de l'image, encodé en base 64
      */
-    async addFrame(src) {
-        return new Promise(async (resolve, reject) => {
+    writeImage(sFilename, src) {
+        return new Promise((resolve, reject) => {
             let sExt = '';
             let r = src.match(/^data:image\/([a-z]+);/);
             if (r) {
@@ -108,14 +116,24 @@ class MovieMaker {
             } else {
                 reject('this image has no "data:image/***" header');
             }
-            ++this.iFrame;
-            await this.writeBinaryFile(path.resolve(this.PATH_FRAMES, FILENAME_ROOT + this.iFrame + '.' + sExt), this.extractImageRawData(src));
-            resolve();
+            return fsp.b64fwrite(sFilename + '.' + sExt, this.extractImageRawData(src));
         });
     }
 
-    getUserHome() {
-        return PATH_HOME;
+
+    /**
+     * Sauvegarde la collection de frames spécifiée.
+     * Nettoyage du répertoire "frames" au préalable.
+     * @param aFrames {string[]}
+     */
+    async saveFrames(aFrames) {
+        let nZeros = (aFrames.length - 1).toString().length;
+        return Promise.all(aFrames.map((f, i) =>
+            this.writeImage(
+                path.resolve(this.PATH_FRAMES, 'frame-' + i.toString().padStart(nZeros, '0')),
+                f
+            ))
+        );
     }
 }
 

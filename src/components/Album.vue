@@ -40,7 +40,7 @@
             <v-flex xs12>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn :disabled="getFrameCount === 0" icon @click="unselectAllFrames">
+                    <v-btn :disabled="getSelectedFrameCount === 0" icon @click="unselectAllFrames">
                         <v-icon>mdi-select-off</v-icon>
                     </v-btn>
                     <v-btn :disabled="getFrameCount === 0" icon @click="selectAllFrames">

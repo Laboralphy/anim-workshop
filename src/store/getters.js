@@ -54,11 +54,7 @@ export default {
         }
     },
 
-
-    /**
-     * Renvoie le message d'erreur générale de l'application
-     * @param state
-     * @returns {function(): *}
-     */
-    getError: state => () => state.error,
+    getAlerts: state => () => {
+        return state.alerts;
+    }
 }

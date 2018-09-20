@@ -37,7 +37,7 @@
     import {mapActions} from 'vuex';
 
     export default {
-        name: "MainScreen",
+        name: "Surfaces",
         components: {PhotoSurface, WebcamSurface},
         data: function() {
             return {
@@ -49,7 +49,7 @@
 
             ...mapActions([
                 'addFrame',
-                'showError'
+                'showAlert'
             ]),
 
             /**
@@ -83,7 +83,7 @@
                     sBaseMessage,
                     sExtraMessage
                 ]).filter(s => !!s).join(' - ');
-                this.showError({caption: sMsg});
+                this.showAlert({type: 'error', message: sMsg});
             }
         }
     }
