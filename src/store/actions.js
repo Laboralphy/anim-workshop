@@ -37,8 +37,18 @@ export default {
         commit(types.IMPORT_PROJECT, {data});
         commit(types. SET_PROJECT_NAME, {name});
     },
-    
+
     [types.SET_PROJECT_LIST]: function({commit}, {projects}) {
         commit(types.SET_PROJECT_LIST, {projects});
-	}
+    },
+
+    [types.SET_MUSIC]: function({commit}, {file}) {
+        commit(types.SET_MUSIC, {file});
+    },
+
+    [types.CLEAR_MUSIC]: function({commit}) {
+        commit(types.CLEAR_MUSIC);
+    },
+
+
 };

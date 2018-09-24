@@ -4,7 +4,7 @@
             <v-flex xs12>
                 <v-tabs
                         v-model="active"
-                        slider-color="#4F4"
+                        slider-color="accent"
                         @input="tabChanged"
                 >
                     <v-tab :key="1" ripple>Caméra</v-tab>

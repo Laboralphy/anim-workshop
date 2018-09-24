@@ -15,9 +15,9 @@ export default {
         };
     },
 
-    getProjectName: state => () => {
-        return state.name;
-    },
+    getProjectName: state => () => state.name,
+
+    getMusicFilename: state => () => state.musicFile,
 
     /**
      * Renvoie la liste des frames enregistrées dans le store

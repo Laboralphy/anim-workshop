@@ -8,6 +8,7 @@
                     @project-load="tbProjectLoad"
             ></Toolbar>
             <Alerts></Alerts>
+            <FlashText ref="o_flash_text"></FlashText>
             <router-view></router-view>
         </v-content>
         <NameProjectDialog ref="o_rename_dlg"></NameProjectDialog>
@@ -28,10 +29,12 @@
     import Alerts from './Alerts.vue';
     import Toolbar from "./Toolbar.vue";
     import FilmProgressDialog from "./FilmProgressDialog.vue";
+    import FlashText from "./FlashText.vue";
 
     export default {
         name: "Application",
         components: {
+            FlashText,
             FilmProgressDialog,
             Toolbar,
             OpenProjectDialog,
@@ -46,7 +49,8 @@
                 'getFrames',
                 'getProjectName',
                 'getProjectExport',
-                'isDark'
+                'isDark',
+                'getMusicFilename'
             ]),
         },
 
@@ -63,6 +67,15 @@
                 'showAlert',
                 'importProject'
             ]),
+
+            /**
+             * Affiche un snackbar, généralement pour indiquer qu'une opération
+             * s'est bien déroulée...
+             * préférer showAlert pour afficher un message d'erreur important
+             */
+            showSnackbar: function(sMessage, sType) {
+                this.$refs.o_flash_text.display(sMessage, sType);
+            },
 
             /**
              * Vérification automatique et mise à jour du nom de projet
@@ -99,10 +112,7 @@
                 if (this.checkProjectName()) {
                     try {
                         await projectManager.saveProject(this.getProjectExport());
-                        this.showAlert({
-                            type: 'success',
-                            message: 'Sauvegarde effectuée.'
-                        });
+                        this.showSnackbar('Sauvegarde effectuée', 'success');
                     } catch (e) {
                         this.showAlert({
                             type: 'error',
@@ -124,12 +134,13 @@
                         let nCount = this.getFrames().length;
                         await projectManager.saveProject(this.getProjectExport());
                         await projectManager.saveFrames(this.getFrames().map(f => f.src));
-                        await projectManager.makeFilm('', progress => {
+                        await projectManager.makeFilm(this.getMusicFilename(), progress => {
                             progressDlg.setProgress(100 * progress / nCount | 0);
                         });
                     }
                     progressDlg.dialog = false;
-                    this.showAlert({message: 'Création du film réussie.', type: 'success'});
+                    this.showSnackbar('Création du film réussie', 'success');
+                    progressDlg.setProgress(0);
                 } catch (e) {
                     progressDlg.dialog = false;
                     this.showAlert({message: 'Erreur durant la phase de création de film. ' + e, type: 'error'});

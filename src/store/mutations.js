@@ -22,7 +22,7 @@ export default {
      */
     [types.SHOW_ALERT]: function(state, {message, type}) {
         let sa = state.alerts;
-        while (sa.length > 2) {
+        while (sa.length > 0) {
             sa.shift();
         }
         sa.push({
@@ -122,5 +122,13 @@ export default {
     [types.SET_PROJECT_LIST]: function(state, {projects}) {
 		let n = state.projectList.length;
 		state.projectList.splice(0, n, projects);
-	}
+	},
+
+    [types.SET_MUSIC]: function(state, {file}) {
+        state.musicFile = file;
+    },
+
+    [types.CLEAR_MUSIC]: function(state) {
+        state.musicFile = false;
+    }
 }

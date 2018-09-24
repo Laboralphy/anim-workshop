@@ -12,6 +12,7 @@
                 </v-layout>
                 <v-layout row>
                     <v-flex xs12>
+                        <MusicUploader></MusicUploader>
                     </v-flex>
                 </v-layout>
             </v-flex>
@@ -24,9 +25,10 @@
     import Album from "./Album.vue";
     import Surfaces from "./Surfaces.vue";
     import {mapGetters, mapActions} from 'vuex';
+    import MusicUploader from "./MusicUploader.vue";
     export default {
         name: "Workspace",
-        components: {Surfaces, Album},
+        components: {MusicUploader, Surfaces, Album},
 
         computed: {
             ...mapGetters([
@@ -37,8 +39,6 @@
         },
 
         methods: {
-            ...mapActions(['showAlert']),
-
             /**
              * visualisation d'une image dans la snapshot view
              */

@@ -15,16 +15,16 @@
             <v-card-text>
                 Le film est en cour de création à partir des images de l'album.
             </v-card-text>
-            <v-container>
+            <v-container class="text-xs-center">
                 <v-layout wrap>
                     <v-flex xs12>
                         <v-progress-circular
-                                ref="o_progress_circ"
-                                :rotate="-90"
-                                :size="100"
-                                :width="15"
-                                :value="x"
-                                color="primary"
+                            ref="o_progress_circ"
+                            :rotate="-90"
+                            :size="100"
+                            :width="15"
+                            :value="x"
+                            color="accent"
                         >
                             {{ x }}%
                         </v-progress-circular>

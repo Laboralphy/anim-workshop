@@ -1,5 +1,10 @@
 <template>
-    <canvas ref="o_canvas" width="640" height="480"></canvas>
+    <div>
+        <canvas ref="o_canvas" width="640" height="480"></canvas>
+        <audio loop="loop" ref="o_audio">
+            <source :src="getMusicFilename()"></source>
+        </audio>
+    </div>
 </template>
 
 <script>
@@ -19,7 +24,8 @@
 
         computed: {
             ...mapGetters([
-                'getFrames'
+                'getFrames',
+                'getMusicFilename'
             ]),
 
 
@@ -51,6 +57,8 @@
                 if (this.oInterval !== null) {
                     return;
                 }
+                this.$refs.o_audio.load();
+                this.$refs.o_audio.play();
                 let aFrameData = this.getFrames();
                 let aProm = aFrameData
                     .map(f => f.src)
@@ -75,6 +83,7 @@
                 if (this.oInterval === null) {
                     return;
                 }
+                this.$refs.o_audio.pause();
                 clearInterval(this.oInterval);
                 this.oInterval = null;
             }

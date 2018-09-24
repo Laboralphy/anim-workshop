@@ -9,7 +9,7 @@ export default {
      */
     frames: [], // liste de toutes les frames
     lastFrameId: 1, // dernier identifiant de frame attribué
-    musicFile: '', // nom du fichier musical
+    musicFile: false, // nom du fichier musical
 
     /**
      * chaque alerte dispose de ce format :

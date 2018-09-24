@@ -18,7 +18,6 @@
                     </v-img>
                     <v-card-title>
                         <div class="grey--text">
-                            <span>Prenez des clichés avec votre webcam et concevez un petit film d'animation.</span><br/><br/>
                             <span>Version : </span>
                                 <span class="about-d">{{ version }}</span><br/>
                             <span>Conception : </span>
@@ -30,7 +29,7 @@
                         </div>
                     </v-card-title>
                     <v-card-actions>
-                        <v-btn flat color="#4F4" to="/workspace">Démarrer</v-btn>
+                        <v-btn flat color="accent" to="/workspace">Démarrer</v-btn>
                     </v-card-actions>
                 </v-card>
             </v-flex>

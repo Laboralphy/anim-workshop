@@ -15,10 +15,19 @@ import Splash from './components/Splash.vue';
 
 Vue.use(Vuex);
 Vue.use(Vuetify, {
-    iconfont: 'mdi'
+    iconfont: 'mdi',
+    theme: {
+        primary: "#9C27B0",
+        secondary: "#EA80FC",
+        accent: "#44FF44",
+        error: "#f44336",
+        warning: "#ffeb3b",
+        info: "#2196f3",
+        success: "#4caf50"
+    }
 });
 Vue.use(VueRouter);
-Vue.use(VueShortkey, { prevent: ['input', 'textarea'] });
+Vue.use(VueShortkey, {prevent: ['input', 'textarea']});
 
 function createApplication() {
 
@@ -30,12 +39,12 @@ function createApplication() {
     const app = new Vue({
         el: '#vue-application',
         store: new Vuex.Store(store),
-        router: new VueRouter({ routes }),
+        router: new VueRouter({routes}),
         components: {
             'application': Application
         },
 
-        render: function(h) {
+        render: function (h) {
             return h(Application);
         }
     });
