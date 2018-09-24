@@ -5,6 +5,7 @@
                 <v-tabs
                         v-model="active"
                         slider-color="#4F4"
+                        @input="tabChanged"
                 >
                     <v-tab :key="1" ripple>Caméra</v-tab>
                     <v-tab :key="2" ripple>Snapshot</v-tab>
@@ -21,6 +22,12 @@
             <v-flex xs12>
                 <v-card-actions>
                     <v-spacer></v-spacer>
+                    <v-btn v-if="playing" icon @click="previewPause">
+                        <v-icon>mdi-pause</v-icon>
+                    </v-btn>
+                    <v-btn v-else icon @click="previewPlay">
+                        <v-icon>mdi-play</v-icon>
+                    </v-btn>
                     <v-btn icon @click="takePicture()">
                         <v-icon>mdi-camera</v-icon>
                     </v-btn>
@@ -36,13 +43,17 @@
     import * as types from "../store/types";
     import {mapActions} from 'vuex';
 
+    const TAB_WEBCAM = 0;
+    const TAB_SNAPSHOT = 1;
+
     export default {
         name: "Surfaces",
         components: {PhotoSurface, WebcamSurface},
         data: function() {
             return {
-                active: '',
+                active: 0,
                 flash: '',
+                playing: false
             };
         },
         methods: {
@@ -60,9 +71,14 @@
                 setTimeout(() => this.flash = false, 333);
             },
 
+            /**
+             * On dessine un truc dans le snapshoit :
+             * changer l'onglet afin de voir le snapshot
+             */
             setCanvasContent: function(oImage) {
                 let oCanvas = this.$refs.o_photo.$refs.o_canvas;
                 oCanvas.getContext('2d').drawImage(oImage, 0, 0);
+                this.active = TAB_SNAPSHOT;
             },
 
             /**
@@ -74,6 +90,23 @@
                 oWcs.capture(oCanvas);
                 this.triggerFlash();
                 return this.addFrame({data: oCanvas.toDataURL('image/jpeg')});
+            },
+
+            /**
+             * lance la lecture de l'animation
+             */
+            previewPlay: function() {
+                this.active = 1;
+                this.$refs.o_photo.startAnimation();
+                this.playing = true;
+            },
+
+            /**
+             * met l'animation en pause
+             */
+            previewPause: function() {
+                this.$refs.o_photo.stopAnimation();
+                this.playing = false;
             },
 
             /**
@@ -89,6 +122,17 @@
                     sExtraMessage
                 ]).filter(s => !!s).join(' - ');
                 this.showAlert({type: 'error', message: sMsg});
+            },
+
+            /**
+             * on a changé de tab
+             * si la tab active n'est plus TAB_SNAPSHOT alors on doit metter
+             * l'animation en pause.
+             */
+            tabChanged: function() {
+                if (this.active !== TAB_SNAPSHOT) {
+                    this.previewPause();
+                }
             }
         }
     }

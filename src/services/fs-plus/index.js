@@ -10,7 +10,8 @@ const os = require('os');
 const promMkdirp = util.promisify(mkdirp);
 const promReaddir = util.promisify(fs.readdir);
 const promUnlink = util.promisify(fs.unlink);
-
+const promReadFile = util.promisify(fs.readFile);
+const promAccess = util.promisify(fs.access);
 
 class FsPlus {
     /**
@@ -68,6 +69,56 @@ class FsPlus {
             ws.end();
         });
     }
+
+    /**
+     * Ecriture d'un fichier ascii
+     * @param sFilename {string} nom du fichier
+     * @param data {string} chaine de caractère
+     * @return {Promise<any>}
+     */
+    fwrite(sFilename, data) {
+        return new Promise((resolve, reject) => {
+            let ws = fs.createWriteStream(sFilename);
+            let oData = new Buffer(data);
+            ws.on('finish', () => resolve());
+            ws.write(oData);
+            ws.end();
+        });
+    }
+
+    /**
+     * lecture d'un fichier ascii utf-8
+     * @param sFilename {string} nom du fichier
+     * @return {*|Promise<any>|Promise<void>|Promise<string | Buffer>}
+     */
+    fread(sFilename) {
+        return promReadFile(sFilename, {encoding: 'utf-8'});
+    }
+
+    access(sFilename, c) {
+        return new Promise(resolve => {
+            promAccess(sFilename, c)
+                .then(() => {
+                    resolve(true);
+                })
+                .catch(() => {
+                    resolve(false);
+                });
+        });
+    }
+
+    exists(sFilename) {
+        return this.access(sFilename, fs.constants.F_OK);
+    }
+
+    readable(sFilename) {
+        return this.access(sFilename, fs.constants.R_OK);
+    }
+
+    writeable(sFilename) {
+        return this.access(sFilename, fs.constants.W_OK);
+    }
+
 }
 
 module.exports = FsPlus;

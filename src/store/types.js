@@ -5,6 +5,7 @@ export const UNSELECT_ALL_FRAMES = 'unselectAllFrames';
 export const DELETE_SELECTED_FRAMES = 'deleteSelectedFrames';
 export const CLEAR_FRAMES = 'clearFrames';
 export const SET_PROJECT_NAME = 'setProjectName';
-
 export const SHOW_ALERT = 'showAlert';
+export const IMPORT_PROJECT = 'importProject';
+export const SET_PROJECT_LIST = 'setProjectList';
 

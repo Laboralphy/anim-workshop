@@ -1,15 +1,17 @@
 export default {
 
+	isDark: state => () => state.dark,
+
     /**
-     * effectue une export du state, à des fin de sauvegarde
+     * Renvoie un etat simplifiée pour exportation
      * @param state
-     * @return {function(): {}}
+     * @return {function(): {frames: (Array|args.data.frames|{frame, url, name}|Window), lastFrameId: (Array|args.data.frames|{frame, url, name}|Window)}}
      */
-    getExport: state => () => {
+    getProjectExport: state => () => {
         return {
             frames: state.frames,
-            lastId: state.lastFrameId
-        };
+            lastFrameId: state.lastFrameId
+        }
     },
 
     getProjectName: state => () => {
@@ -56,5 +58,9 @@ export default {
 
     getAlerts: state => () => {
         return state.alerts;
-    }
+    },
+    
+    getProjectList: state => () => {
+		return  state.projectList;
+	}
 }

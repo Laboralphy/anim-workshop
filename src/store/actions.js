@@ -31,5 +31,14 @@ export default {
 
     [types.SET_PROJECT_NAME]: function({commit}, {name}) {
         commit(types.SET_PROJECT_NAME, {name});
-    }
+    },
+
+    [types.IMPORT_PROJECT]: function({commit}, {data, name}) {
+        commit(types.IMPORT_PROJECT, {data});
+        commit(types. SET_PROJECT_NAME, {name});
+    },
+    
+    [types.SET_PROJECT_LIST]: function({commit}, {projects}) {
+        commit(types.SET_PROJECT_LIST, {projects});
+	}
 };

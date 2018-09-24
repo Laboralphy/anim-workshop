@@ -1,42 +1,60 @@
 <template>
-    <v-layout row wrap>
-        <v-flex xs12 sm8 offset-sm2 md6 offset-md3>
-            <v-card transition="fade-transition">
-                <v-img
-                    class="yellow--text"
-                    height="384px"
-                    src="./static/images/anim-rotating-tiles.gif"
-                >
-                    <v-container fill-height fluid>
-                        <v-layout fill-height>
-                            <v-flex xs12 align-end flexbox>
-                                <span class="headline anim-ws-title">Animation Workshop</span>
-                            </v-flex>
-                        </v-layout>
-                    </v-container>
-                </v-img>
-                <v-card-title>
-                    <div class="grey--text">
-                        <span>Conception & Design : </span>
-                            <span class="about-d">Laboralphy</span><br/>
-                        <span>Architecture : </span>
-                            <span class="about-d">Vue.js</span>
-                            <span>&amp;</span>
-                            <span class="about-d">Electron</span>
-                    </div>
-                </v-card-title>
-            </v-card>
-        </v-flex>
-    </v-layout>
+    <v-container fluid>
+        <v-layout row wrap>
+            <v-flex xs12 sm8 offset-sm2 md6 offset-md3>
+                <v-card>
+                    <v-img
+                        class="yellow--text"
+                        height="384px"
+                        src="./rsc/images/anim-nyan-cat.gif"
+                    >
+                        <v-container fill-height fluid>
+                            <v-layout fill-height>
+                                <v-flex xs12 align-end flexbox>
+                                    <span class="headline anim-ws-title">Animation Workshop</span>
+                                </v-flex>
+                            </v-layout>
+                        </v-container>
+                    </v-img>
+                    <v-card-title>
+                        <div class="grey--text">
+                            <span>Version : </span>
+                                <span class="about-d">{{ version }}</span><br/>
+                            <span>Conception : </span>
+                                <span class="about-d">Raphaël Marandet</span><br/>
+                            <span>Architecture : </span>
+                                <span class="about-d">Vue.js</span>
+                                <span>&amp;</span>
+                                <span class="about-d">Electron</span>
+                        </div>
+                    </v-card-title>
+                    <v-card-actions>
+                        <v-btn flat color="#4F4" to="/workspace">Démarrer</v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-flex>
+        </v-layout>
+    </v-container>
 </template>
 
 <script>
+    import pjson from '../services/package-json';
     export default {
         name: "Splash",
 
         data: function() {
             return {
                 visible: false
+            }
+        },
+
+        computed: {
+            /**
+             * Renvoie le numéro de version
+             * @return {string}
+             */
+            version: function() {
+                return pjson.version;
             }
         },
 

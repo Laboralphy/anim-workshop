@@ -1,7 +1,7 @@
 <template>
     <v-dialog
             v-model="dialog"
-            width="500px"
+            width="50%"
     >
         <v-card>
             <v-card-title
@@ -10,6 +10,7 @@
             >
                 Nom du projet
             </v-card-title>
+            <v-divider></v-divider>
             <v-card-text>
                 Donner un nom au projet, ne serait-ce que pour pouvoir l'enregistrer sur disque,
                 et ne pas le perdre.
@@ -48,20 +49,25 @@
     export default {
         name: "NameProjectDialog",
         computed: {
-            ...mapGetters(['getProjectName'])
+            ...mapGetters([
+                'getProjectName'
+            ])
         },
+
         data: function() {
             return {
                 dialog: false,
                 name: ''
             };
         },
+
         methods: {
             confirmClicked: function() {
                 this.$store.dispatch(types.SET_PROJECT_NAME, {name: this.name});
                 this.dialog = false;
             }
         },
+
         mounted: function() {
             this.name = this.getProjectName();
         }

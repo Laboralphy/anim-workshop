@@ -53,9 +53,6 @@
                     <v-btn :disabled="getSelectedFrameCount === 0" icon @click="deleteClicked">
                         <v-icon>mdi-delete</v-icon>
                     </v-btn>
-                    <v-btn :disabled="getFrameCount === 0" icon @click="movieClicked">
-                        <v-icon>mdi-movie</v-icon>
-                    </v-btn>
                 </v-card-actions>
             </v-flex>
         </v-layout>
@@ -107,15 +104,9 @@
 
             ...mapActions([
                 types.SELECT_ALL_FRAMES,
-                types.UNSELECT_ALL_FRAMES
+                types.UNSELECT_ALL_FRAMES,
+                types.SELECT_FRAME
             ]),
-
-            /**
-             * On a cliqué sur le bouton de génération de film
-             */
-            movieClicked: function() {
-                this.$emit('make-movie');
-            },
 
             /**
              * on efface les photo sélectionnée, avec confirmation
@@ -125,7 +116,7 @@
             },
 
             phToggleSelect: function(id) {
-                this.$store.dispatch(types.SELECT_FRAME, {id});
+                this[types.SELECT_FRAME]({id});
             },
 
             viewClicked: function(oFrame) {
