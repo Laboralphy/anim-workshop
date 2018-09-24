@@ -10,8 +10,9 @@ export default {
     getProjectExport: state => () => {
         return {
             frames: state.frames,
-            lastFrameId: state.lastFrameId
-        }
+            lastFrameId: state.lastFrameId,
+            musicFile: state.musicFile
+        };
     },
 
     getProjectName: state => () => {

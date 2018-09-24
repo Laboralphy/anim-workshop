@@ -28,7 +28,7 @@
                     <v-btn v-else icon @click="previewPlay">
                         <v-icon>mdi-play</v-icon>
                     </v-btn>
-                    <v-btn icon @click="takePicture()">
+                    <v-btn icon v-shortkey="['space']" @shortkey="takePicture()" @click="takePicture()">
                         <v-icon>mdi-camera</v-icon>
                     </v-btn>
                 </v-card-actions>

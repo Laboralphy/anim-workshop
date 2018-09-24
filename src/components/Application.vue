@@ -1,19 +1,18 @@
 <template>
-    <v-app :dark="isDark()"
-        @keydown.space="keypress"
-    >
+    <v-app :dark="isDark()">
         <v-content>
             <Toolbar
-                @project-rename="tbProjectRename"
-                @project-save="tbProjectSave"
-                @project-render="tbProjectRender"
-                @project-load="tbProjectLoad"
+                    @project-rename="tbProjectRename"
+                    @project-save="tbProjectSave"
+                    @project-render="tbProjectRender"
+                    @project-load="tbProjectLoad"
             ></Toolbar>
             <Alerts></Alerts>
             <router-view></router-view>
         </v-content>
         <NameProjectDialog ref="o_rename_dlg"></NameProjectDialog>
-        <OpenProjectDialog ref="o_open_dlg" :projects="projectPreviews" @load="tbProjectLoadConfirm"></OpenProjectDialog>
+        <OpenProjectDialog ref="o_open_dlg" :projects="projectPreviews"
+                           @load="tbProjectLoadConfirm"></OpenProjectDialog>
         <FilmProgressDialog ref="o_progress_dlg"></FilmProgressDialog>
     </v-app>
 </template>
@@ -22,7 +21,6 @@
     import {mapGetters, mapActions} from 'vuex';
     import projectManager from '../services/project-manager';
 
-    import MainMenu from "./MainMenu.vue";
     import Surfaces from "./Surfaces.vue";
     import Album from "./Album.vue";
     import NameProjectDialog from "./NameProjectDialog.vue";
@@ -35,14 +33,13 @@
         name: "Application",
         components: {
             FilmProgressDialog,
-			Toolbar, 
-			OpenProjectDialog, 
-			NameProjectDialog, 
-			Album, 
-			Surfaces, 
-			MainMenu, 
-			Alerts
-		},
+            Toolbar,
+            OpenProjectDialog,
+            NameProjectDialog,
+            Album,
+            Surfaces,
+            Alerts
+        },
 
         computed: {
             ...mapGetters([
@@ -53,7 +50,7 @@
             ]),
         },
 
-        data: function() {
+        data: function () {
             return {
                 projectPreviews: []
             }
@@ -62,8 +59,8 @@
 
         methods: {
 
-			...mapActions([
-			    'showAlert',
+            ...mapActions([
+                'showAlert',
                 'importProject'
             ]),
 
@@ -88,7 +85,7 @@
              * click sur le changement du nom du projet :
              * activer le dialogue de saisie d'un nouveau nom
              */
-            tbProjectRename: function() {
+            tbProjectRename: function () {
                 let oDlg = this.$refs.o_rename_dlg;
                 oDlg.name = this.getProjectName();
                 oDlg.dialog = true;
@@ -98,19 +95,19 @@
              * Sauvegarde du projet sous le nom donné
              * (voir évènement name-changed)
              */
-            tbProjectSave: async function() {
+            tbProjectSave: async function () {
                 if (this.checkProjectName()) {
-					try {
-						await projectManager.saveProject(this.getProjectExport());
-						this.showAlert({
-							type: 'success',
-							message: 'Sauvegarde effectuée.'
-						});
-                    } catch(e) {
-						this.showAlert({
-							type: 'error',
-							message: 'Erreur durant la sauvegarde : ' + e.message
-						});
+                    try {
+                        await projectManager.saveProject(this.getProjectExport());
+                        this.showAlert({
+                            type: 'success',
+                            message: 'Sauvegarde effectuée.'
+                        });
+                    } catch (e) {
+                        this.showAlert({
+                            type: 'error',
+                            message: 'Erreur durant la sauvegarde : ' + e.message
+                        });
                     }
                 }
             },
@@ -119,7 +116,7 @@
              * Création du film à partir des images de l'album
              * @return {Promise<void>}
              */
-            tbProjectRender: async function() {
+            tbProjectRender: async function () {
                 let progressDlg = this.$refs.o_progress_dlg;
                 try {
                     progressDlg.dialog = true;
@@ -133,31 +130,27 @@
                     }
                     progressDlg.dialog = false;
                     this.showAlert({message: 'Création du film réussie.', type: 'success'});
-                } catch(e) {
+                } catch (e) {
                     progressDlg.dialog = false;
                     this.showAlert({message: 'Erreur durant la phase de création de film. ' + e, type: 'error'});
                 }
             },
-            
-            tbProjectLoad: async function() {
-				let aProjects = await projectManager.getProjectList();
+
+            tbProjectLoad: async function () {
+                let aProjects = await projectManager.getProjectList();
                 this.projectPreviews.splice(0);
                 aProjects.forEach(p => this.projectPreviews.push(p));
                 let oDlg = this.$refs.o_open_dlg;
-				oDlg.dialog = true;
+                oDlg.dialog = true;
             },
 
             /**
              * Chargement d'un projet
              * @param name {string}
              */
-            tbProjectLoadConfirm: async function({name}) {
+            tbProjectLoadConfirm: async function ({name}) {
                 let data = await projectManager.loadProject(name);
                 this.importProject({data, name});
-            },
-
-            keypress: function(event) {
-                console.log(event);
             }
         },
     }

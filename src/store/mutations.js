@@ -113,6 +113,7 @@ export default {
         data.frames.forEach(f => sf.push(f));
         state.lastFrameId = data.lastFrameId;
         state.name = data.name;
+        state.musicFile = data.musicFile;
     },
     
     /**

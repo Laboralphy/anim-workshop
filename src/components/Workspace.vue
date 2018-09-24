@@ -10,6 +10,10 @@
                         <Album @view-frame="albViewFrame"></Album>
                     </v-flex>
                 </v-layout>
+                <v-layout row>
+                    <v-flex xs12>
+                    </v-flex>
+                </v-layout>
             </v-flex>
         </v-layout>
     </v-container>

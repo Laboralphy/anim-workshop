@@ -5,8 +5,8 @@
     >
         <v-card>
             <v-card-title
-                    class="headline"
-                    primary-title
+                class="headline"
+                primary-title
             >
                 Nom du projet
             </v-card-title>
@@ -27,14 +27,14 @@
             <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn
-                        flat
-                        @click="dialog = false"
+                    flat
+                    @click="dialog = false"
                 >
                     Annuler
                 </v-btn>
                 <v-btn
-                        flat
-                        @click="confirmClicked"
+                    flat
+                    @click="confirmClicked"
                 >
                     Confirmer
                 </v-btn>

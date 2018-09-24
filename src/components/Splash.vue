@@ -6,7 +6,7 @@
                     <v-img
                         class="yellow--text"
                         height="384px"
-                        src="./rsc/images/anim-nyan-cat.gif"
+                        src="./assets/images/anim-nyan-cat.gif"
                     >
                         <v-container fill-height fluid>
                             <v-layout fill-height>
@@ -18,6 +18,7 @@
                     </v-img>
                     <v-card-title>
                         <div class="grey--text">
+                            <span>Prenez des clichés avec votre webcam et concevez un petit film d'animation.</span><br/><br/>
                             <span>Version : </span>
                                 <span class="about-d">{{ version }}</span><br/>
                             <span>Conception : </span>

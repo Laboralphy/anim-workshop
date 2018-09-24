@@ -1,7 +1,7 @@
 <template>
     <v-toolbar app>
 		<v-toolbar-items>
-            <v-btn icon to="/workspace">
+            <v-btn icon to="/">
                 <v-icon>mdi-home</v-icon>
             </v-btn>
 		</v-toolbar-items>

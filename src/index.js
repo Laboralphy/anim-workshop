@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import Vuetify from 'vuetify';
 import VueRouter from 'vue-router';
+import VueShortkey from 'vue-shortkey';
 import store from './store';
 import Application from './components/Application.vue';
 
@@ -17,6 +18,7 @@ Vue.use(Vuetify, {
     iconfont: 'mdi'
 });
 Vue.use(VueRouter);
+Vue.use(VueShortkey, { prevent: ['input', 'textarea'] });
 
 function createApplication() {
 
@@ -35,9 +37,6 @@ function createApplication() {
 
         render: function(h) {
             return h(Application);
-        },
-
-        mounted: function() {
         }
     });
     return app;

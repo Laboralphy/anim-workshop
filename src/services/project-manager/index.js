@@ -54,16 +54,13 @@ class ProjectManager {
      * @return {Promise}
      */
     saveProject(state) {
-		let dNow = new Date();
-		let oStruct = {
-			...state,
-			date: dNow.getTime()
-		};
-		let data = JSON.stringify(oStruct);
-		let aProms = [
-			fsp.fwrite(path.resolve(this.PATH_PROJECT, 'state.json'), data)
-		];
-		return Promise.all(aProms);
+        let dNow = new Date();
+        let oStruct = {
+            ...state,
+            date: dNow.getTime()
+        };
+        let data = JSON.stringify(oStruct);
+        return fsp.fwrite(path.resolve(this.PATH_PROJECT, 'state.json'), data);
     }
 
     /**
@@ -123,7 +120,30 @@ class ProjectManager {
         }
     }
 
+    /**
+     * Renvoie le résultat d'une commande which
+     * @param aCommands
+     * @returns {Promise<void>}
+     */
+    async which(sCommand) {
+        return new Promise((resolve, reject) => {
+            cp.exec('which ' + sCommand, (error, stdout, stderr) => {
+                if (error) {
+                    resolve(false);
+                }
+                if (stdout.length > 0 && stdout.includes(sCommand)) {
+                    resolve(sCommand)
+                } else {
+                    resolve(false);
+                }
+            });
+        });
+    }
+
     async makeFilm(sMusic, pProgress) {
+        let sFF = await this.which('ffmpeg');
+        let sAV = await this.which('avconv');
+        let sCommand = sFF || sAV;
         return new Promise((resolve, reject) => {
             // avconv -r 5 -i $VIDEO_PATH/$project/${project}_%d.png -b:v 1000k $musicParam -acodec libmp3lame -shortest $VIDEO_PATH/$project.mp4
             let aArgsInput = [
@@ -149,8 +169,10 @@ class ProjectManager {
                 ...aArgsMusic,
                 ...aArgsOutput
             ];
-            console.log(aArgs);
-            let p = cp.spawn('avconv', aArgs, {});
+            if (sCommand === '') {
+                reject('neither "avconv" nor "ffmpeg" command available');
+            }
+            let p = cp.spawn(sCommand, aArgs, {});
             p.on('close', code => {
                 if (code === 0) {
                     resolve();
@@ -192,7 +214,7 @@ class ProjectManager {
                 let data = JSON.parse(sData);
                 let thumbnail = false;
 				if (data.frames.length > 0) {
-					thumbnail = data.frames[data.frames.length >> 1];
+					thumbnail = data.frames[data.frames.length >> 1].src;
 				}
 				let oDate = new Date(data.date);
 				resolve({
@@ -231,6 +253,5 @@ class ProjectManager {
     }
 
 }
-
 
 module.exports = new ProjectManager();

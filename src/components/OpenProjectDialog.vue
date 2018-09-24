@@ -15,10 +15,13 @@
             <v-card-text height="70%">
                 <v-list two-line>
                     <v-list-tile
-                            v-for="(p, i) in projects"
-                            :key="p.name + '/' + p.entropy"
-                            @click="loadClicked(p.name)"
+                        v-for="(p, i) in projects"
+                        :key="p.name + '/' + p.entropy"
+                        @click="loadClicked(p.name)"
                     >
+                        <v-list-tile-avatar>
+                            <img :src="p.thumbnail"/>
+                        </v-list-tile-avatar>
                         <v-list-tile-content>
                             <v-list-tile-title>{{ p.name }}</v-list-tile-title>
                             <v-list-tile-sub-title>
