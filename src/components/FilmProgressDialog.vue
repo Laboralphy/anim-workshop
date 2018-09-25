@@ -12,12 +12,12 @@
                 Création du film
             </v-card-title>
             <v-divider></v-divider>
-            <v-card-text>
-                Le film est en cour de création à partir des images de l'album.
-            </v-card-text>
             <v-container class="text-xs-center">
-                <v-layout wrap>
-                    <v-flex xs12>
+                <v-layout row>
+                    <v-flex xs6>
+                        Veuillez patienter, Le film est en cours de création.
+                    </v-flex>
+                    <v-flex xs6>
                         <v-progress-circular
                             ref="o_progress_circ"
                             :rotate="-90"

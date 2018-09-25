@@ -6,6 +6,7 @@
                     @project-save="tbProjectSave"
                     @project-render="tbProjectRender"
                     @project-load="tbProjectLoad"
+                    @video-upload="tbVideoUpload"
             ></Toolbar>
             <Alerts></Alerts>
             <FlashText ref="o_flash_text"></FlashText>
@@ -15,6 +16,7 @@
         <OpenProjectDialog ref="o_open_dlg" :projects="projectPreviews"
                            @load="tbProjectLoadConfirm"></OpenProjectDialog>
         <FilmProgressDialog ref="o_progress_dlg"></FilmProgressDialog>
+        <VideoUploaderDialog ref="o_videoup_dlg" @uploaded="vuUploaded" @error="vuError"></VideoUploaderDialog>
     </v-app>
 </template>
 
@@ -30,10 +32,13 @@
     import Toolbar from "./Toolbar.vue";
     import FilmProgressDialog from "./FilmProgressDialog.vue";
     import FlashText from "./FlashText.vue";
+    import VideoUploaderDialog from "./VideoUploaderDialog.vue";
+
 
     export default {
         name: "Application",
         components: {
+            VideoUploaderDialog,
             FlashText,
             FilmProgressDialog,
             Toolbar,
@@ -65,7 +70,8 @@
 
             ...mapActions([
                 'showAlert',
-                'importProject'
+                'importProject',
+                'uploadVideo'
             ]),
 
             /**
@@ -127,20 +133,21 @@
              * @return {Promise<void>}
              */
             tbProjectRender: async function () {
+                const UPLOAD_AFTER_CREATION = true;
                 let progressDlg = this.$refs.o_progress_dlg;
                 try {
-                    progressDlg.dialog = true;
                     if (this.checkProjectName()) {
+                        progressDlg.dialog = true;
                         let nCount = this.getFrames().length;
                         await projectManager.saveProject(this.getProjectExport());
                         await projectManager.saveFrames(this.getFrames().map(f => f.src));
                         await projectManager.makeFilm(this.getMusicFilename(), progress => {
                             progressDlg.setProgress(100 * progress / nCount | 0);
                         });
+                        progressDlg.dialog = false;
+                        progressDlg.setProgress(0);
+                        this.showSnackbar('Création du film réussie', 'success');
                     }
-                    progressDlg.dialog = false;
-                    this.showSnackbar('Création du film réussie', 'success');
-                    progressDlg.setProgress(0);
                 } catch (e) {
                     progressDlg.dialog = false;
                     this.showAlert({message: 'Erreur durant la phase de création de film. ' + e, type: 'error'});
@@ -162,6 +169,26 @@
             tbProjectLoadConfirm: async function ({name}) {
                 let data = await projectManager.loadProject(name);
                 this.importProject({data, name});
+            },
+
+            tbVideoUpload: function() {
+                let filename = projectManager.computeVideoFilename();
+                projectManager.projectVideoExists().then(bExists => {
+                    if (bExists) {
+                        this.uploadVideo({filename});
+                    } else {
+                        this.uploadVideo({filename: ''});
+                    }
+                    this.$refs.o_videoup_dlg.dialog = true;
+                });
+            },
+
+            vuError: function(e) {
+                this.showSnackbar(e, 'error');
+            },
+
+            vuUploaded: function() {
+                this.showSnackbar('Transmission video terminée', 'success');
             }
         },
     }

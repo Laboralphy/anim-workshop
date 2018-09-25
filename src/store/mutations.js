@@ -130,5 +130,17 @@ export default {
 
     [types.CLEAR_MUSIC]: function(state) {
         state.musicFile = false;
+    },
+
+    [types.UPLOAD_VIDEO]: function(state, payload) {
+        if ('filename' in payload) {
+            state.uploadingVideo.filename = payload.filename;
+        }
+        if ('sent' in payload) {
+            state.uploadingVideo.sent = payload.sent;
+        }
+        if ('size' in payload) {
+            state.uploadingVideo.size = payload.size;
+        }
     }
 }

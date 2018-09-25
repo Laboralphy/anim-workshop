@@ -26,6 +26,20 @@ export default {
      */
     getFrames: state => () => state.frames,
 
+
+    getUploadingVideo: state => () => state.uploadingVideo,
+
+    getUploadingVideoStatus: state => () => {
+        let suv = state.uploadingVideo;
+        if (suv.filename === '') {
+            return 0; // pas d'upload en cours, upload impossible car pas de fichier spécifié
+        } else if (suv.filename !== '' && suv.size === 0) {
+            return 1; // pas d'upload en cours, upload possible, prêt à etre déclenché
+        } else  {
+            return 2; // upload en cours
+        }
+    },
+
     /**
      * Renvoie true si la frame spécifée est selectionnée
      * @param state

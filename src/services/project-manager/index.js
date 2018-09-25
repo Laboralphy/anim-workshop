@@ -6,10 +6,11 @@ assure
 * 2) creation de film
 
  */
+const fs = require('fs');
 const path = require('path');
 const FsPlus = require('../fs-plus');
 const cp = require('child_process');
-
+const SFTPClient = require('ssh2-sftp-client');
 
 const fsp = new FsPlus();
 
@@ -27,6 +28,7 @@ class ProjectManager {
 
     constructor() {
         this.sName = '';
+        this.sVideoFilename = '';
         this.iFrame = 0;
         this.PATH_PROJECTS = path.resolve(PATH_BASE, 'projects');
     }
@@ -140,10 +142,31 @@ class ProjectManager {
         });
     }
 
+
+    computeVideoFilename() {
+        if (this.sName != '') {
+            return path.resolve(this.PATH_MOVIE, this.sName + '.mp4');
+        } else {
+            return '';
+        }
+    }
+
+    projectVideoExists() {
+        return fsp.readable(this.computeVideoFilename());
+    }
+
+    /**
+     * Renvoie true si le fichier video existe
+     */
+    videoFileExists() {
+
+    }
+
     async makeFilm(sMusic, pProgress) {
         let sFF = await this.which('ffmpeg');
         let sAV = await this.which('avconv');
         let sCommand = sFF || sAV;
+        let sVideoFilename = this.computeVideoFilename();
         return new Promise((resolve, reject) => {
             // avconv -r 5 -i $VIDEO_PATH/$project/${project}_%d.png -b:v 1000k $musicParam -acodec libmp3lame -shortest $VIDEO_PATH/$project.mp4
             let aArgsInput = [
@@ -152,17 +175,16 @@ class ProjectManager {
                 '-r', 5,
                 '-i',
                 path.resolve(this.PATH_FRAMES, 'frame-%d.jpg'),
-                '-vcodec', 'libx264',
-                '-b:v', '1000k',
             ];
             let aArgsMusic = !!sMusic ? [
                     '-i',
                     sMusic,
-                    '-acodec', 'libmp3lame',
-                    '-shortest'
                 ] : [];
             let aArgsOutput = [
-                path.resolve(this.PATH_MOVIE, this.sName + '.mp4'),
+                '-vcodec', 'libx264',
+                '-b:v', '1000k',
+                '-shortest',
+                sVideoFilename,
             ];
             let aArgs = [
                 ...aArgsInput,
@@ -175,7 +197,7 @@ class ProjectManager {
             let p = cp.spawn(sCommand, aArgs, {});
             p.on('close', code => {
                 if (code === 0) {
-                    resolve();
+                    resolve(sVideoFilename);
                 } else {
                     reject(code);
                 }
@@ -183,12 +205,43 @@ class ProjectManager {
             p.stderr.on('data', data => {
                 let r = data.toString().match(/^frame= *([0-9]+) /);
                 if (r) {
-                    console.log(r[1]);
                     if (pProgress) {
                         pProgress(parseInt(r[1]));
                     }
                 }
             });
+        });
+    }
+
+    async uploadFilm(pCallback) {
+        return new Promise(async (resolve, reject) => {
+            let localFile = this.computeVideoFilename();
+            let bExists = await fsp.readable(localFile);
+            if (!bExists) {
+                reject('fichier video inexistant : ' + localFile.split('/').pop());
+                return;
+            }
+            let sJson = await fsp.fread(path.resolve(PATH_BASE, 'upload.json'));
+            let oCnx = JSON.parse(sJson);
+            let remoteFile = path.resolve(oCnx.remotePath, this.sName + '.mp4');
+            let sftp = new SFTPClient();
+            await sftp.connect(oCnx);
+            let nSize = await fsp.size(localFile);
+            let nSent = 0;
+            let rs = fs.createReadStream(localFile);
+            if (pCallback) {
+                pCallback('start', {filename: this.sName + '.mp4', size: nSize});
+                rs.on('data', chunk => {
+                    nSent += chunk.length;
+                    pCallback('progress', {sent: nSent, size: nSize});
+                });
+                rs.on('end', () => {
+                    nSent = nSize;
+                    pCallback('end');
+                });
+            }
+            await sftp.put(rs, remoteFile, {});
+            resolve();
         });
     }
 

@@ -50,5 +50,8 @@ export default {
         commit(types.CLEAR_MUSIC);
     },
 
+    [types.UPLOAD_VIDEO]: function({commit}, payload) {
+        commit(types.UPLOAD_VIDEO, payload);
+    }
 
 };

@@ -10,4 +10,5 @@ export const IMPORT_PROJECT = 'importProject';
 export const SET_PROJECT_LIST = 'setProjectList';
 export const SET_MUSIC = 'setMusic';
 export const CLEAR_MUSIC = 'clearMusic';
+export const UPLOAD_VIDEO = 'uploadVideo';
 

@@ -10,9 +10,11 @@
         <v-container>
             <v-layout row>
                 <v-flex xs12 v-if="getMusicFilename()" class="text-xs-center">
-                    <v-btn icon @click="clearFile">
-                        <v-icon>mdi-music-off</v-icon>
-                    </v-btn><span>{{ getMusicFilename().split('/').pop() }}</span>
+                    <label class="file-select" @click="clearFile">
+                        <div class="select-button">
+                            <span><v-icon>mdi-music-off</v-icon> {{ getMusicFilename().split('/').pop() }}</span>
+                        </div>
+                    </label>
                 </v-flex>
                 <v-flex xs12 v-else>
                     <label class="file-select">
@@ -70,6 +72,8 @@
         border-radius: .3rem;
         text-align: center;
         cursor: pointer;
+        white-space: nowrap;
+        text-overflow: ellipsis;
     }
 
     /* Don't forget to hide the original file input! */
