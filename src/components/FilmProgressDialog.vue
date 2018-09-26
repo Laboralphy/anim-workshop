@@ -18,16 +18,18 @@
                         Veuillez patienter, Le film est en cours de création.
                     </v-flex>
                     <v-flex xs6>
-                        <v-progress-circular
-                            ref="o_progress_circ"
-                            :rotate="-90"
-                            :size="100"
-                            :width="15"
-                            :value="x"
-                            color="accent"
-                        >
-                            {{ x }}%
-                        </v-progress-circular>
+                        <div class="text-xs-center">
+                            <v-progress-circular
+                                ref="o_progress_circ"
+                                :rotate="-90"
+                                :size="100"
+                                :width="15"
+                                :value="x"
+                                color="accent"
+                            >
+                                {{ x }}%
+                            </v-progress-circular>
+                        </div>
                     </v-flex>
                 </v-layout>
             </v-container>

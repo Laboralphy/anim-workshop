@@ -23,6 +23,7 @@
 <script>
     import {mapGetters, mapActions} from 'vuex';
     import projectManager from '../services/project-manager';
+    import VideoMaker from '../services/video-maker';
 
     import Surfaces from "./Surfaces.vue";
     import Album from "./Album.vue";
@@ -33,7 +34,7 @@
     import FilmProgressDialog from "./FilmProgressDialog.vue";
     import FlashText from "./FlashText.vue";
     import VideoUploaderDialog from "./VideoUploaderDialog.vue";
-
+    import projectTree from "../services/project-tree";
 
     export default {
         name: "Application",
@@ -95,7 +96,7 @@
                     });
                     return false;
                 } else {
-                    projectManager.setName(sProjectName);
+                    projectTree.setName(sProjectName);
                     return true;
                 }
             },
@@ -133,17 +134,22 @@
              * @return {Promise<void>}
              */
             tbProjectRender: async function () {
-                const UPLOAD_AFTER_CREATION = true;
                 let progressDlg = this.$refs.o_progress_dlg;
                 try {
                     if (this.checkProjectName()) {
                         progressDlg.dialog = true;
+                        let vm = new VideoMaker();
                         let nCount = this.getFrames().length;
                         await projectManager.saveProject(this.getProjectExport());
                         await projectManager.saveFrames(this.getFrames().map(f => f.src));
-                        await projectManager.makeFilm(this.getMusicFilename(), progress => {
+                        vm.on('progress', progress => {
                             progressDlg.setProgress(100 * progress / nCount | 0);
                         });
+                        await vm.render(
+                            projectTree.getFramesPath(),
+                            this.getMusicFilename(),
+                            projectTree.getOutputFilename()
+                        );
                         progressDlg.dialog = false;
                         progressDlg.setProgress(0);
                         this.showSnackbar('Création du film réussie', 'success');
@@ -172,8 +178,8 @@
             },
 
             tbVideoUpload: function() {
-                let filename = projectManager.computeVideoFilename();
-                projectManager.projectVideoExists().then(bExists => {
+                let filename = projectTree.getOutputFilename();
+                projectTree.isOutputFileExists().then(bExists => {
                     if (bExists) {
                         this.uploadVideo({filename});
                     } else {

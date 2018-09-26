@@ -8,7 +8,7 @@
                     class="headline"
                     primary-title
             >
-                Transmission au serveur
+                Transmettre la vidéo au serveur
             </v-card-title>
             <v-divider></v-divider>
             <v-card-text v-if="status() === 0">
@@ -33,19 +33,21 @@
                 <v-container>
                     <v-layout row>
                         <v-flex xs6>
-                            <span>Transmission en cours. Vous pouvez fermer cette fenêtre, la transmission s'effectuera en arrière plan.</span>
+                            <span>La video est en cours de transmission sur le serveur. Vous pouvez fermer cette fenêtre, la transmission s'effectuera en arrière plan.</span>
                         </v-flex>
                         <v-flex xs6>
-                            <v-progress-circular
-                                    ref="o_progress_circ"
-                                    :rotate="-90"
-                                    :size="100"
-                                    :width="15"
-                                    :value="x"
-                                    color="accent"
-                            >
-                                {{ x }}%
-                            </v-progress-circular>
+                            <div class="text-xs-center">
+                                <v-progress-circular
+                                        ref="o_progress_circ"
+                                        :rotate="-90"
+                                        :size="100"
+                                        :width="15"
+                                        :value="x"
+                                        color="accent"
+                                >
+                                    {{ x }}%
+                                </v-progress-circular>
+                            </div>
                         </v-flex>
                     </v-layout>
                 </v-container>
@@ -75,6 +77,8 @@
 <script>
     import {mapGetters, mapActions} from 'vuex';
     import projectManager from '../services/project-manager';
+    import projectTree from '../services/project-tree';
+    import VideoUploader from '../services/video-uploader';
 
     export default {
         name: "VideoUploaderDialog",
@@ -100,12 +104,13 @@
         methods: {
             ...mapActions(['uploadVideo']),
             transmit: function() {
-                if (!projectManager.computeVideoFilename()) {
+                if (!projectTree.getOutputFilename()) {
                     this.$emit('error', 'Video inexistante');
                     this.dialog = false;
                     return;
                 }
-                projectManager.uploadFilm((s, p) => {
+                let vu = new VideoUploader();
+                vu.upload((s, p) => {
                     switch (s) {
                         case 'start':
                             this.uploadVideo({filename: p.filename, sent: 0, size: p.size});

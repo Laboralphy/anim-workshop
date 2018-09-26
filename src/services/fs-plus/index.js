@@ -133,4 +133,4 @@ class FsPlus {
 
 }
 
-module.exports = FsPlus;
+module.exports = new FsPlus();
