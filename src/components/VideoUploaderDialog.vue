@@ -15,7 +15,7 @@
                 <v-container class="red--text">
                     <v-layout row>
                         <v-flex xs12>
-                            <span>Fichier vidéo non généré.</span>
+                            <span>Le fichier vidéo n'a pas encore été créé.</span>
                         </v-flex>
                     </v-layout>
                 </v-container>
@@ -24,7 +24,7 @@
                 <v-container>
                     <v-layout row>
                         <v-flex xs12>
-                            <span>Vidéo prête à être transmise.</span>
+                            <span>La vidéo est prête à être transmise au serveur.</span>
                         </v-flex>
                     </v-layout>
                 </v-container>
@@ -76,7 +76,6 @@
 
 <script>
     import {mapGetters, mapActions} from 'vuex';
-    import projectManager from '../services/project-manager';
     import projectTree from '../services/project-tree';
     import VideoUploader from '../services/video-uploader';
 

@@ -8,13 +8,16 @@
         <v-toolbar-title>{{ getTitle }}</v-toolbar-title>
         <v-toolbar-items>
             <v-btn icon @click="$emit('project-rename')">
-                <v-icon>mdi-pencil</v-icon>
+                <v-icon>mdi-rename-box</v-icon>
             </v-btn>
-            <v-btn :disabled="!canBeSaved" icon @click="$emit('project-save')">
-                <v-icon>mdi-content-save</v-icon>
+            <v-btn icon @click="$emit('project-new')">
+                <v-icon>mdi-new-box</v-icon>
             </v-btn>
             <v-btn icon @click="$emit('project-load')">
                 <v-icon>mdi-folder-open</v-icon>
+            </v-btn>
+            <v-btn :disabled="!canBeSaved" icon @click="$emit('project-save')">
+                <v-icon>mdi-content-save</v-icon>
             </v-btn>
             <v-btn :disabled="!canBeRendered" icon @click="$emit('project-render')">
                 <v-icon>mdi-movie</v-icon>
@@ -35,8 +38,12 @@
             ...mapGetters([
                 'getFrames',
                 'getProjectName',
-                'getLastVideoUploaded'
+                'getLastVideoUploaded',
             ]),
+
+            ...mapGetters({
+                status: 'getUploadingVideoStatus'
+            }),
 
             /**
              * renvoie le nombre de frame dans l'album

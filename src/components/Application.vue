@@ -2,11 +2,12 @@
     <v-app :dark="isDark()">
         <v-content>
             <Toolbar
-                    @project-rename="tbProjectRename"
-                    @project-save="tbProjectSave"
-                    @project-render="tbProjectRender"
-                    @project-load="tbProjectLoad"
-                    @video-upload="tbVideoUpload"
+                @project-new="tbProjectNew"
+                @project-rename="tbProjectRename"
+                @project-save="tbProjectSave"
+                @project-render="tbProjectRender"
+                @project-load="tbProjectLoad"
+                @video-upload="tbVideoUpload"
             ></Toolbar>
             <Alerts></Alerts>
             <FlashText ref="o_flash_text"></FlashText>
@@ -17,6 +18,7 @@
                            @load="tbProjectLoadConfirm"></OpenProjectDialog>
         <FilmProgressDialog ref="o_progress_dlg"></FilmProgressDialog>
         <VideoUploaderDialog ref="o_videoup_dlg" @uploaded="vuUploaded" @error="vuError"></VideoUploaderDialog>
+        <NewConfirmDialog ref="o_new_confirm"></NewConfirmDialog>
     </v-app>
 </template>
 
@@ -35,10 +37,12 @@
     import FlashText from "./FlashText.vue";
     import VideoUploaderDialog from "./VideoUploaderDialog.vue";
     import projectTree from "../services/project-tree";
+    import NewConfirmDialog from "./NewConfirmDialog.vue";
 
     export default {
         name: "Application",
         components: {
+            NewConfirmDialog,
             VideoUploaderDialog,
             FlashText,
             FilmProgressDialog,
@@ -99,6 +103,13 @@
                     projectTree.setName(sProjectName);
                     return true;
                 }
+            },
+
+            /**
+             * Remise a zero du projet
+             */
+            tbProjectNew: function() {
+                this.$refs.o_new_confirm.dialog = true;
             },
 
             /**

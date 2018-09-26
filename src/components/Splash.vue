@@ -23,12 +23,12 @@
                             <span>Conception : </span>
                                 <span class="about-d">Raphaël Marandet</span><br/>
                             <span>Architecture : </span>
-                                <span class="about-d">Vue.js</span>
-                                <span>&amp;</span>
-                                <span class="about-d">Electron</span>
+                                <v-icon>mdi-nodejs</v-icon><span class="about-d">Node.js</span>
+                                <v-icon>mdi-vuejs</v-icon><span class="about-d">Vue.js</span>
+                                <v-icon>mdi-atom</v-icon><span class="about-d">Electron.js</span>
                         </div>
                     </v-card-title>
-                    <v-card-actions>
+                    <v-card-actions right>
                         <v-btn flat color="accent" to="/workspace">Démarrer</v-btn>
                     </v-card-actions>
                 </v-card>

@@ -17,8 +17,8 @@ Vue.use(Vuex);
 Vue.use(Vuetify, {
     iconfont: 'mdi',
     theme: {
-        primary: "#9C27B0",
-        secondary: "#EA80FC",
+        primary: "#EA80FC",
+        secondary: "#9C27B0",
         accent: "#44FF44",
         error: "#f44336",
         warning: "#ffeb3b",

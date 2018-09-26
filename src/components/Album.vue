@@ -3,7 +3,7 @@
         <v-card-title primary-title>
             <v-layout row wrap>
                 <v-flex xs12 md6>
-                    <v-badge right v-if="getFrameCount > 0">
+                    <v-badge color="secondary" right v-if="getFrameCount > 0">
                         <span slot="badge">{{ getFrameCount }}</span>
                         <span class="text-uppercase">{{ title }}</span>
                     </v-badge>
