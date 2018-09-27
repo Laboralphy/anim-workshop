@@ -58,18 +58,23 @@ class ProjectManager {
      */
     writeImage(sFilename, src) {
         return new Promise((resolve, reject) => {
-            let sExt = '';
-            let r = src.match(/^data:image\/([a-z]+);/);
-            if (r) {
-				sExt = r[1];
-				if (sExt in MIME_ALIASES) {
-					sExt = MIME_ALIASES[sExt];
-				}
-            } else {
-                reject('this image has no "data:image/***" header');
+            try {
+                let sExt = '';
+                let r = src.match(/^data:image\/([a-z]+);/);
+                if (r) {
+                    sExt = r[1];
+                    if (sExt in MIME_ALIASES) {
+                        sExt = MIME_ALIASES[sExt];
+                    }
+                } else {
+                    reject('this image has no "data:image/***" header');
+                }
+                fsp.b64fwrite(sFilename + '.' + sExt, this.extractImageRawData(src))
+                    .then(() => resolve())
+            } catch (e) {
+                console.error(src);
+                reject(e);
             }
-            fsp.b64fwrite(sFilename + '.' + sExt, this.extractImageRawData(src))
-                .then(() => resolve())
         });
     }
 
@@ -85,12 +90,14 @@ class ProjectManager {
         let aFiles = await fsp.ls(sFramePath);
         aFiles = aFiles.map(f => path.resolve(sFramePath, f));
         await fsp.rm(aFiles);
+        let iFrame = 0;
         for (let i = 0, l = aFrames.length; i < l; ++i) {
             let f = aFrames[i];
             await this.writeImage(
-                path.resolve(sFramePath, FILENAME_ROOT + i.toString()),
+                path.resolve(sFramePath, FILENAME_ROOT + iFrame.toString()),
                 f
             );
+            ++iFrame;
         }
     }
 

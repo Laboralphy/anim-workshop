@@ -10,6 +10,8 @@ export default {
     frames: [], // liste de toutes les frames
     lastFrameId: 1, // dernier identifiant de frame attribué
     musicFile: false, // nom du fichier musical
+    title: 'La bonne vidéo avec un titre',
+    credits: ['Jojo Lapin', 'Patanouk', 'Gersiflet', 'Glouke', 'Oumphaha'],
 
     uploadingVideo: {
         filename: '',

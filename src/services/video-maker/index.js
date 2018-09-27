@@ -11,7 +11,7 @@ class VideoMaker {
     /**
      * Renvoie le résultat d'une commande which, et ceci dans le but de pouvoir
      * choisir entre ffmpeg et avconv
-     * @param sCommand {string)
+     * @param sCommand {string}
      * @returns {Promise<void>}
      * @private
      */

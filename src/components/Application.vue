@@ -26,6 +26,7 @@
     import {mapGetters, mapActions} from 'vuex';
     import projectManager from '../services/project-manager';
     import VideoMaker from '../services/video-maker';
+    import CreditsGenerator from '../services/credits-generator';
 
     import Surfaces from "./Surfaces.vue";
     import Album from "./Album.vue";
@@ -60,7 +61,9 @@
                 'getProjectName',
                 'getProjectExport',
                 'isDark',
-                'getMusicFilename'
+                'getMusicFilename',
+                'getVideoTitle',
+                'getVideoCredits'
             ]),
         },
 
@@ -140,6 +143,26 @@
                 }
             },
 
+
+            _createImage(w, h) {
+                let canvas = document.createElement('canvas');
+                canvas.width = w;
+                canvas.height = h;
+                let image = new Image();
+                let commit = () => this._commitImage(canvas, image);
+                return Object.create({
+                    canvas, image, commit
+                });
+            },
+
+            _commitImage(canvas, image) {
+                return new Promise(resolve => {
+                    let data = canvas.toDataURL('image/jpeg');
+                    image.addEventListener('load', event => resolve(image));
+                    image.src = data;
+                });
+            },
+
             /**
              * Création du film à partir des images de l'album
              * @return {Promise<void>}
@@ -150,9 +173,21 @@
                     if (this.checkProjectName()) {
                         progressDlg.dialog = true;
                         let vm = new VideoMaker();
-                        let nCount = this.getFrames().length;
                         await projectManager.saveProject(this.getProjectExport());
-                        await projectManager.saveFrames(this.getFrames().map(f => f.src));
+                        let aFrames = this.getFrames().map(f => f.src);
+                        // ajouter : titre, et crédits de fin
+                        // titre
+                        const cg = new CreditsGenerator();
+                        let oFrameTitle = this._createImage(640, 480);
+                        cg.compose(oFrameTitle.canvas, this.getVideoTitle(), this.getVideoCredits());
+                        oFrameTitle.commit();
+                        let sTitleSrc = oFrameTitle.image.src;
+                        for (let iTime = 0; iTime < 5 * 3; ++iTime) {
+                            aFrames.unshift(sTitleSrc);
+                        }
+                        let nCount = aFrames.length;
+
+                        await projectManager.saveFrames(aFrames);
                         vm.on('progress', progress => {
                             progressDlg.setProgress(100 * progress / nCount | 0);
                         });
@@ -167,6 +202,7 @@
                     }
                 } catch (e) {
                     progressDlg.dialog = false;
+                    console.error(e);
                     this.showAlert({message: 'Erreur durant la phase de création de film. ' + e, type: 'error'});
                 }
             },

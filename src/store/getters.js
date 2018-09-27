@@ -77,5 +77,8 @@ export default {
     
     getProjectList: state => () => {
 		return  state.projectList;
-	}
+	},
+
+    getVideoTitle: state => () => state.title,
+    getVideoCredits: state => () => state.credits
 }
