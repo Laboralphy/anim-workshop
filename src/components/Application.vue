@@ -178,13 +178,25 @@
                         // ajouter : titre, et crédits de fin
                         // titre
                         const cg = new CreditsGenerator();
+
                         let oFrameTitle = this._createImage(640, 480);
-                        cg.compose(oFrameTitle.canvas, this.getVideoTitle(), this.getVideoCredits());
+                        await cg.composeStartScreen(oFrameTitle.canvas, this.getVideoTitle());
                         oFrameTitle.commit();
                         let sTitleSrc = oFrameTitle.image.src;
                         for (let iTime = 0; iTime < 5 * 3; ++iTime) {
                             aFrames.unshift(sTitleSrc);
                         }
+
+
+                        oFrameTitle = this._createImage(640, 480);
+                        await cg.composeEndCredits(oFrameTitle.canvas, this.getVideoTitle(), this.getVideoCredits());
+                        oFrameTitle.commit();
+                        sTitleSrc = oFrameTitle.image.src;
+                        for (let iTime = 0; iTime < 5 * 3; ++iTime) {
+                            aFrames.push(sTitleSrc);
+                        }
+
+
                         let nCount = aFrames.length;
 
                         await projectManager.saveFrames(aFrames);

@@ -8,7 +8,6 @@ import Application from './components/Application.vue';
 
 import 'vuetify/dist/vuetify.css';
 import 'mdi/css/materialdesignicons.min.css';
-import colors from 'vuetify/es5/util/colors';
 import '../assets/styles/fonts.css';
 
 import Workspace from './components/Workspace.vue';

@@ -11,4 +11,10 @@ export const SET_PROJECT_LIST = 'setProjectList';
 export const SET_MUSIC = 'setMusic';
 export const CLEAR_MUSIC = 'clearMusic';
 export const UPLOAD_VIDEO = 'uploadVideo';
+export const CREDIT_TITLE = 'creditTitle';
+export const CREDIT_SET_NAMES = 'creditSetNames';
+export const CREDIT_ADD_NAME = 'creditAddName';
+export const CREDIT_CLEAR_NAMES = 'creditClearNames';
+export const CREDIT_DELETE_NAME = 'creditDeleteName';
+
 

@@ -9,11 +9,15 @@
                 >
                     <v-tab :key="1" ripple>Caméra</v-tab>
                     <v-tab :key="2" ripple>Snapshot</v-tab>
+                    <v-tab :key="3" ripple>Credits</v-tab>
                     <v-tab-item :key="1">
                         <WebcamSurface @error="wcsError" :class="flash ? 'flash' : ''" ref="o_wcs" res="480" aspect="4:3"></WebcamSurface>
                     </v-tab-item>
                     <v-tab-item :key="2">
                         <PhotoSurface :class="flash ? 'flash' : ''" ref="o_photo"></PhotoSurface>
+                    </v-tab-item>
+                    <v-tab-item>
+                        <CreditEditor></CreditEditor>
                     </v-tab-item>
                 </v-tabs>
             </v-flex>
@@ -42,13 +46,14 @@
     import PhotoSurface from "./PhotoSurface.vue";
     import * as types from "../store/types";
     import {mapActions} from 'vuex';
+    import CreditEditor from "./CreditEditor.vue";
 
     const TAB_WEBCAM = 0;
     const TAB_SNAPSHOT = 1;
 
     export default {
         name: "Surfaces",
-        components: {PhotoSurface, WebcamSurface},
+        components: {CreditEditor, PhotoSurface, WebcamSurface},
         data: function() {
             return {
                 active: 0,

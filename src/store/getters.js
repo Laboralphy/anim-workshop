@@ -11,7 +11,9 @@ export default {
         return {
             frames: state.frames,
             lastFrameId: state.lastFrameId,
-            musicFile: state.musicFile
+            musicFile: state.musicFile,
+            title: state.title,
+            credits: state.credits
         };
     },
 

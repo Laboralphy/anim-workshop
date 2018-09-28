@@ -52,6 +52,26 @@ export default {
 
     [types.UPLOAD_VIDEO]: function({commit}, payload) {
         commit(types.UPLOAD_VIDEO, payload);
-    }
+    },
+
+    [types.CREDIT_TITLE]: function({commit}, {title}) {
+        commit(types.CREDIT_TITLE, {title});
+    },
+
+    [types.CREDIT_ADD_NAME]: function({commit}, {name}) {
+        commit(types.CREDIT_ADD_NAME, {name});
+    },
+
+    [types.CREDIT_SET_NAMES]: function({commit}, {names}) {
+        commit(types.CREDIT_SET_NAMES, {names});
+    },
+
+    [types.CREDIT_CLEAR_NAMES]: function({commit}) {
+        commit(types.CREDIT_CLEAR_NAMES);
+    },
+
+    [types.CREDIT_DELETE_NAME]: function({commit}, {name}) {
+        commit(types.CREDIT_DELETE_NAME, {name});
+    },
 
 };
