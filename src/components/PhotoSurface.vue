@@ -1,6 +1,6 @@
 <template>
     <div>
-        <canvas ref="o_canvas" width="640" height="480"></canvas>
+        <canvas ref="o_canvas" :width="video.width" :height="video.height"></canvas>
         <audio loop="loop" ref="o_audio">
             <source :src="getMusicFilename()"></source>
         </audio>
@@ -9,6 +9,7 @@
 
 <script>
     import {mapGetters} from 'vuex';
+    import config from '../services/config'
 
     export default {
         name: "PhotoSurface",
@@ -18,7 +19,8 @@
                 oInterval: null, // identifiant de la boucle intervalaire
                 pAnimationHandler: null, // handler d'animation
                 iFrame: 0,
-                aFrames: [] // contient les images générés à partir des frames
+                aFrames: [], // contient les images générés à partir des frames
+                video: config.video
             }
         },
 

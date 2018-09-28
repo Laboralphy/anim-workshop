@@ -27,6 +27,7 @@
     import projectManager from '../services/project-manager';
     import VideoMaker from '../services/video-maker';
     import CreditsGenerator from '../services/credits-generator';
+    import packageJson from '../services/package-json';
 
     import Surfaces from "./Surfaces.vue";
     import Album from "./Album.vue";
@@ -39,6 +40,8 @@
     import VideoUploaderDialog from "./VideoUploaderDialog.vue";
     import projectTree from "../services/project-tree";
     import NewConfirmDialog from "./NewConfirmDialog.vue";
+    import config from '../services/config';
+
 
     export default {
         name: "Application",
@@ -171,6 +174,8 @@
                 let progressDlg = this.$refs.o_progress_dlg;
                 try {
                     if (this.checkProjectName()) {
+                        const WIDTH = config.video.width;
+                        const HEIGHT = config.video.height;
                         progressDlg.dialog = true;
                         let vm = new VideoMaker();
                         await projectManager.saveProject(this.getProjectExport());
@@ -179,7 +184,7 @@
                         // titre
                         const cg = new CreditsGenerator();
 
-                        let oFrameTitle = this._createImage(640, 480);
+                        let oFrameTitle = this._createImage(WIDTH, HEIGHT);
                         await cg.composeStartScreen(oFrameTitle.canvas, this.getVideoTitle());
                         oFrameTitle.commit();
                         let sTitleSrc = oFrameTitle.image.src;
@@ -187,9 +192,8 @@
                             aFrames.unshift(sTitleSrc);
                         }
 
-
-                        oFrameTitle = this._createImage(640, 480);
-                        await cg.composeEndCredits(oFrameTitle.canvas, this.getVideoTitle(), this.getVideoCredits());
+                        oFrameTitle = this._createImage(WIDTH, HEIGHT);
+                        await cg.composeEndCredits(oFrameTitle.canvas, 'FIN', this.getVideoCredits());
                         oFrameTitle.commit();
                         sTitleSrc = oFrameTitle.image.src;
                         for (let iTime = 0; iTime < 5 * 3; ++iTime) {

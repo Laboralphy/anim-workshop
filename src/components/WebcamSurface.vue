@@ -6,32 +6,8 @@
     import wcs from '../services/snapshot';
     export default {
         name: "WebcamSurface",
-        props: ['res', 'aspect'],
-        data: function() {
-            return {
-                width: 0,
-                height: 0
-            }
-        },
+        props: ['res', 'aspect', 'width', 'height'],
         methods: {
-            /**
-             * Convertit l'aspect en ratio
-             * @param sAspect {string} vaut "4:3" ou "16:9"
-             * @return {number} le ratio calculé
-             */
-            getRatio: function(sAspect) {
-                switch (sAspect) {
-                    case '4:3':
-                        return 4 / 3;
-
-
-                    case '16:9':
-                        return 16 / 9;
-
-                    default:
-                        throw new Error('this aspect is not supported - ' + sAspect);
-                }
-            },
             /**
              * Démarrage de la webcam.
              * La balise video est alimentée par le flux issue de la caméra
@@ -39,15 +15,12 @@
             startVideo: async function () {
                 try {
                     const oVideo = this.$refs.o_video;
-                    let ratio = this.getRatio(this.aspect);
                     wcs.init({
-                        width: Math.round(this.res * ratio),
-                        height: this.res
+                        width: this.width,
+                        height: this.height
                     });
                     await wcs.start(oVideo);
                     const m = wcs.metrics();
-                    this.width = m.width;
-                    this.height = m.height;
                 } catch (e) {
                     this.$emit('error', {error: e});
                 }

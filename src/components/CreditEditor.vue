@@ -2,12 +2,12 @@
     <v-container>
         <v-layout row wrap>
             <v-flex xs12>
-                <v-text-field v-model="title" label="Titre" required></v-text-field>
+                <v-text-field v-model="title" label="Titre"  @input="setTitle"></v-text-field>
             </v-flex>
         </v-layout>
         <v-layout row wrap>
             <v-flex xs8>
-                <v-text-field v-model="name" label="Crédit" @input="setTitle"></v-text-field>
+                <v-text-field v-model="name" label="Crédit"></v-text-field>
             </v-flex>
             <v-flex xs4>
                 <v-btn flat color="success" @click="add">Ajouter</v-btn>
@@ -63,11 +63,11 @@
 
             setTitle: function() {
                 this.creditTitle({title: this.title});
-            }
-        },
+            },
 
-        mounted: function() {
-            this.title = this.getVideoTitle()
+            feed: function() {
+                this.title = this.getVideoTitle();
+            }
         }
     }
 </script>

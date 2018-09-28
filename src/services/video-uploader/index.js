@@ -3,6 +3,7 @@ const fs = require('fs');
 const SFTPClient = require('ssh2-sftp-client');
 const fsp = require('../fs-plus');
 const projectTree = require('../project-tree');
+const config = require('../config');
 
 class VideoUploader {
     async upload(pCallback) {
@@ -14,9 +15,7 @@ class VideoUploader {
                 reject('fichier video inexistant : ' + sDisplayableName);
                 return;
             }
-            let sJson = await fsp.fread(projectTree.getConfigFilename());
-            let oConfig = JSON.parse(sJson);
-            let oCnx = oConfig.upload;
+            let oCnx = config.upload;
             let remoteFile = path.resolve(oCnx.remotePath, projectTree.getName() + '.mp4');
             let sftp = new SFTPClient();
             await sftp.connect(oCnx);
