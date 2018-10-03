@@ -6,10 +6,7 @@ assure
 * 2) creation de film
 
  */
-const fs = require('fs');
 const path = require('path');
-const cp = require('child_process');
-const SFTPClient = require('ssh2-sftp-client');
 const fsp = require('../fs-plus');
 const projectTree = require('../project-tree')
 
@@ -135,7 +132,7 @@ class ProjectManager {
                     entropy: Math.random()
 				});
             } else {
-                reject('le projet n\'est pas lisible');
+                reject('le projet n\'est pas lisible : ' + sProject);
             }
         });
 	}
@@ -151,11 +148,15 @@ class ProjectManager {
             // éliminer les projet qui n'ont pas de state.json
             let aProjects = [];
             for (let i = 0, l = aProjectNames.length; i < l; ++i) {
-                let name = aProjectNames[i];
-                let bReadable = await fsp.readable(path.resolve(projectTree.PATH_PROJECTS, name));
-                if (bReadable) {
-                    let preview = await this.getProjectPreview(name);
-                    aProjects.push(preview);
+                try {
+                    let name = aProjectNames[i];
+                    let bReadable = await fsp.readable(path.resolve(projectTree.PATH_PROJECTS, name));
+                    if (bReadable) {
+                        let preview = await this.getProjectPreview(name);
+                        aProjects.push(preview);
+                    }
+                } catch (e) {
+                    // le projet n'est pas lisible : on l'ignore
                 }
             }
             resolve(aProjects);

@@ -27,7 +27,6 @@
     import projectManager from '../services/project-manager';
     import VideoMaker from '../services/video-maker';
     import CreditsGenerator from '../services/credits-generator';
-    import packageJson from '../services/package-json';
 
     import Surfaces from "./Surfaces.vue";
     import Album from "./Album.vue";
@@ -184,22 +183,25 @@
                         // titre
                         const cg = new CreditsGenerator();
 
-                        let oFrameTitle = this._createImage(WIDTH, HEIGHT);
-                        await cg.composeStartScreen(oFrameTitle.canvas, this.getVideoTitle());
-                        oFrameTitle.commit();
-                        let sTitleSrc = oFrameTitle.image.src;
-                        for (let iTime = 0; iTime < 5 * 3; ++iTime) {
-                            aFrames.unshift(sTitleSrc);
+                        if (!!this.getVideoTitle()) {
+                            let oFrameTitle = this._createImage(WIDTH, HEIGHT);
+                            await cg.composeStartScreen(oFrameTitle.canvas, this.getVideoTitle());
+                            oFrameTitle.commit();
+                            let sTitleSrc = oFrameTitle.image.src;
+                            for (let iTime = 0; iTime < 5 * 3; ++iTime) {
+                                aFrames.unshift(sTitleSrc);
+                            }
                         }
 
-                        oFrameTitle = this._createImage(WIDTH, HEIGHT);
-                        await cg.composeEndCredits(oFrameTitle.canvas, 'FIN', this.getVideoCredits());
-                        oFrameTitle.commit();
-                        sTitleSrc = oFrameTitle.image.src;
-                        for (let iTime = 0; iTime < 5 * 3; ++iTime) {
-                            aFrames.push(sTitleSrc);
+                        if (this.getVideoCredits().length) {
+                            let oFrameTitle = this._createImage(WIDTH, HEIGHT);
+                            await cg.composeEndCredits(oFrameTitle.canvas, 'FIN', this.getVideoCredits());
+                            oFrameTitle.commit();
+                            let sTitleSrc = oFrameTitle.image.src;
+                            for (let iTime = 0; iTime < 5 * 3; ++iTime) {
+                                aFrames.push(sTitleSrc);
+                            }
                         }
-
 
                         let nCount = aFrames.length;
 

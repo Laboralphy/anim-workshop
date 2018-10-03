@@ -16,5 +16,6 @@ export const CREDIT_SET_NAMES = 'creditSetNames';
 export const CREDIT_ADD_NAME = 'creditAddName';
 export const CREDIT_CLEAR_NAMES = 'creditClearNames';
 export const CREDIT_DELETE_NAME = 'creditDeleteName';
+export const SET_CONFIG = 'setConfig';
 
 

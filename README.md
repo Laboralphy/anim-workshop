@@ -1,26 +1,50 @@
 # anim-workshop
-Un logiciel de création d'animation à partir de capture webcam.
+Un logiciel de création d'animations à partir de capture webcam.
+Ce logiciel à un but pédagogique et ne prétend pas rivaliser avec 
+aucun autre produit de ce type.
 
 # Auteur
 Raphaël Marandet (raphael.marandet@gmail.com)
-Dépot GIT : github.com/Laboralphy/anim-workshop.git
+
+Dépot GIT : https://github.com/Laboralphy/anim-workshop.git
 
 
-# A quoi sert ce logiciel ?
-Ce logiciel permet de créer de petits films d'animation par concaténéation d'images capturées 
-à partir de la webcam.
+# Build et Exécution
 
-# Dépendances
+Pour installer les dépendances
+```
+git https://github.com/Laboralphy/anim-workshop.git
+cd anim-workshop
+npm install
+```
+
+Pour construire le projet
+```
+npm build
+```
+
+Pour lancer le projet en mode développement
+```
+npm start
+```
+
+# Outils connexes
 - ffmpeg ou avconv
 - ssh
 
 
 # Comment faire un film ?
 
-1) Lorsque la webcam filme, on peut __capturer des images__ en cliquant sur l'icône ressemblant à un 
+L'écran principal est constitué :
+- d'une barre d'outils (TB)
+- d'un selecteur d'onglets (TS)
+- d'un album (ALB)
+- d'un selecteur de musiques (MS)
+
+1) Onglet "Caméra" : Lorsque la webcam filme, on peut __capturer des images__ en cliquant sur l'icône ressemblant à un 
 appareil photo. On peut également appuyer sur la barre espace.
-2) On peut à tout moment __nommer le projet__ (icone crayon). Cela permet de pouvoir le __sauvegarder__ 
-(icone disquette)
+2) Barre d'outils : On peut à tout moment __nommer le projet__ (icone crayon). Cela permet de pouvoir le __sauvegarder__ 
+(icone disquette).
 3) Au fur et à mesure de la capture, les images s'accumulent dans l'__album__ (partie droite de l'écran).
 Cet album propose des opération basique de gestion (sélection, suppression...)
 4) Sous l'album se trouve un outil pour __ajouter de la musique__. On sélectionne un fichier musical (que l'on peut changer à tout moment).
