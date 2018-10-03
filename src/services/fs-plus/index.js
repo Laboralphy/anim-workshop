@@ -12,6 +12,7 @@ const promReaddir = util.promisify(fs.readdir);
 const promUnlink = util.promisify(fs.unlink);
 const promReadFile = util.promisify(fs.readFile);
 const promAccess = util.promisify(fs.access);
+const promStat = util.promisify(fs.stat);
 
 class FsPlus {
     /**
@@ -119,6 +120,17 @@ class FsPlus {
         return this.access(sFilename, fs.constants.W_OK);
     }
 
+    async size(sFilename) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                let oStat = await promStat(sFilename);
+                resolve(oStat.size);
+            } catch (e) {
+                reject(e);
+            }
+        });
+    }
+
 }
 
-module.exports = FsPlus;
+module.exports = new FsPlus();

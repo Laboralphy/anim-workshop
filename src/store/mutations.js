@@ -114,6 +114,8 @@ export default {
         state.lastFrameId = data.lastFrameId;
         state.name = data.name;
         state.musicFile = data.musicFile;
+        state.title = data.title;
+        state.credits = 'credits' in data ? data.credits : [];
     },
     
     /**
@@ -130,5 +132,46 @@ export default {
 
     [types.CLEAR_MUSIC]: function(state) {
         state.musicFile = false;
+    },
+
+    [types.UPLOAD_VIDEO]: function(state, payload) {
+        if ('filename' in payload) {
+            state.uploadingVideo.filename = payload.filename;
+        }
+        if ('sent' in payload) {
+            state.uploadingVideo.sent = payload.sent;
+        }
+        if ('size' in payload) {
+            state.uploadingVideo.size = payload.size;
+        }
+    },
+
+    [types.CREDIT_TITLE]: function(state, {title}) {
+        state.title = title;
+    },
+
+    [types.CREDIT_SET_NAMES]: function(state, {names}) {
+        state.credits.splice(0, state.credits.length, names.slice(0, 6));
+    },
+
+    [types.CREDIT_ADD_NAME]: function(state, {name}) {
+        if (state.credits.length < 6) {
+            state.credits.push(name);
+        }
+    },
+
+    [types.CREDIT_DELETE_NAME]: function(state, {name}) {
+        let id = state.credits.indexOf(name);
+        if (id >= 0) {
+            state.credits.splice(id, 1);
+        }
+    },
+
+    [types.CREDIT_CLEAR_NAMES]: function(state) {
+        state.credits.splice(0);
+    },
+
+    [types.SET_CONFIG]: function(state, payload) {
+        state.dark = payload.dark;
     }
 }

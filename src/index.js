@@ -8,17 +8,18 @@ import Application from './components/Application.vue';
 
 import 'vuetify/dist/vuetify.css';
 import 'mdi/css/materialdesignicons.min.css';
-import colors from 'vuetify/es5/util/colors';
+import '../assets/styles/fonts.css';
 
 import Workspace from './components/Workspace.vue';
 import Splash from './components/Splash.vue';
+import config from './services/config';
 
 Vue.use(Vuex);
 Vue.use(Vuetify, {
     iconfont: 'mdi',
     theme: {
-        primary: "#9C27B0",
-        secondary: "#EA80FC",
+        primary: "#EA80FC",
+        secondary: "#9C27B0",
         accent: "#44FF44",
         error: "#f44336",
         warning: "#ffeb3b",
