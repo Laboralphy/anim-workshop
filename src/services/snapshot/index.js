@@ -19,10 +19,6 @@ function init(oConfig) {
         width = oConfig.width;
         height = oConfig.height;
     }
-    navigator.getMedia = ( navigator.getUserMedia ||
-        navigator.webkitGetUserMedia ||
-        navigator.mozGetUserMedia ||
-        navigator.msGetUserMedia);
 }
 
 /**
@@ -32,24 +28,21 @@ function init(oConfig) {
  */
 async function start(oVideo) {
     return new Promise((resolve, reject) => {
-        navigator.getMedia(
+        navigator.mediaDevices.getUserMedia(
             {
-                video: true,
+                video: {
+                    width, height
+                },
                 audio: false
-            },
-            function(stream) {
-                if (navigator.mozGetUserMedia) {
-                    oVideo.mozSrcObject = stream;
-                } else {
-                    let vendorURL = window.URL || window.webkitURL;
-                    oVideo.src = vendorURL.createObjectURL(stream);
-                }
-                oVideo.play();
-            },
-            function(err) {
-                reject(err);
             }
-        );
+        ).then(function(stream) {
+            oVideo.addEventListener('loadedmetadata', function(event_md) {
+                oVideo.play();
+            });
+            oVideo.srcObject = stream;
+        }).catch(function(err) {
+            reject(err);
+        });
         oVideo.addEventListener('canplay', function(oEvent){
             const oVideo = oEvent.target;
             if (!bStreaming) {
