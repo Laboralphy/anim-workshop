@@ -1,6 +1,7 @@
 const cp = require('child_process');
 const path = require('path');
 const Events = require('events');
+const os = require('os');
 
 class VideoMaker {
 
@@ -48,6 +49,10 @@ class VideoMaker {
         this._emitter.off(sEvent, pHandler);
     }
 
+    isOSWindows() {
+        return os.platform() === 'win32';
+    }
+
     /**
      * Création de la video
      * @param sInputFramePath {string} chemin des frame input
@@ -60,8 +65,12 @@ class VideoMaker {
         sInputMusicFilename,
         sOutputVideoFilename
     ) {
-        let sFF = await this._which('ffmpeg');
-        let sAV = await this._which('avconv');
+        let bWindows = this.isOSWindows();
+        let sFF = true, sAV = false;
+        if (!bWindows) {
+            sFF = await this._which('ffmpeg');
+            sAV = await this._which('avconv');
+        }
         let sCommand = sFF || sAV;
         return new Promise((resolve, reject) => {
             let aArgsInput = [
