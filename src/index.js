@@ -12,6 +12,7 @@ import '../assets/styles/fonts.css';
 
 import Workspace from './components/Workspace.vue';
 import Splash from './components/Splash.vue';
+import config from './services/config';
 
 Vue.use(Vuex);
 Vue.use(Vuetify, {

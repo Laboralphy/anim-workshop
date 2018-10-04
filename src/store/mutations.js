@@ -169,5 +169,9 @@ export default {
 
     [types.CREDIT_CLEAR_NAMES]: function(state) {
         state.credits.splice(0);
+    },
+
+    [types.SET_CONFIG]: function(state, payload) {
+        state.dark = payload.dark;
     }
 }

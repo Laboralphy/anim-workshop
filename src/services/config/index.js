@@ -8,6 +8,23 @@ const CONFIG_INACCESSIBLE = 2;
 const CONFIG_ERROR = 3;
 
 
+const DEFAULT_TEMPLATE = {
+    "video": {
+        "width": 640,
+        "height": 480
+    },
+    "ui": {
+        "dark": false,
+    },
+    "upload": {
+        "host": "127.0.0.1",
+        "port": 22,
+        "username": "****",
+        "password": "****",
+        "remotePath": "/remote/path"
+    }
+};
+
 function testConfigAccess(s) {
     try {
         let b = fs.accessSync(s, fs.constants.R_OK | fs.constants.W_OK);
@@ -29,27 +46,14 @@ function testConfigAccess(s) {
 function createConfig(s) {
     fs.writeFileSync(
         s,
-        JSON.stringify({
-            "video": {
-                "width": 640,
-                "height": 480
-            },
-            "upload": {
-                "host": "127.0.0.1",
-                "port": 22,
-                "username": "****",
-                "password": "****",
-                "remotePath": "/remote/path"
-            }
-        }),
-        {
-            encoding: 'utf-8'
-        }
+        JSON.stringify(DEFAULT_TEMPLATE),
+        { encoding: 'utf-8' }
     );
 }
 
 function readConfig(s) {
-    return JSON.parse(fs.readFileSync(s, {encoding: 'utf-8'}));
+    let b = JSON.parse(fs.readFileSync(s, {encoding: 'utf-8'}));
+    return b;
 }
 
 function main() {

@@ -74,4 +74,8 @@ export default {
         commit(types.CREDIT_DELETE_NAME, {name});
     },
 
-};
+    [types.SET_CONFIG]: function({commit}, payload) {
+        commit(types.SET_CONFIG, payload);
+    }
+}
+;
