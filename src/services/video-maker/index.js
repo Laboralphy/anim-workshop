@@ -18,16 +18,29 @@ class VideoMaker {
      */
     async _which(sCommand) {
         return new Promise((resolve, reject) => {
-            cp.exec('which ' + sCommand, (error, stdout, stderr) => {
-                if (error) {
-                    resolve(false);
-                }
-                if (stdout.length > 0 && stdout.includes(sCommand)) {
-                    resolve(sCommand)
-                } else {
-                    resolve(false);
-                }
-            });
+            if (this.isOSWindows()) {
+                cp.exec('where ' + sCommand, (error, stdout, stderr) => {
+                    if (error) {
+                        resolve(false);
+                    }
+                    if (stdout.length > 0 && stdout.includes(sCommand)) {
+                        resolve(stdout);
+                    } else {
+                        resolve(false);
+                    }
+                });
+            } else {
+                cp.exec('which ' + sCommand, (error, stdout, stderr) => {
+                    if (error) {
+                        resolve(false);
+                    }
+                    if (stdout.length > 0 && stdout.includes(sCommand)) {
+                        resolve(sCommand);
+                    } else {
+                        resolve(false);
+                    }
+                });
+            }
         });
     }
 
@@ -66,12 +79,18 @@ class VideoMaker {
         sOutputVideoFilename
     ) {
         let bWindows = this.isOSWindows();
-        let sFF = true, sAV = false;
-        if (!bWindows) {
-            sFF = await this._which('ffmpeg');
-            sAV = await this._which('avconv');
+        let sCommand;
+        if (bWindows) {
+            sCommand = 'ffmpeg';
+        } else {
+            if (await this._which('ffmpeg')) {
+                sCommand = 'ffmpeg';
+            } else if (await this._which('avconv')) {
+                sCommand = 'avconv';
+            } else {
+                throw new Error('pas de compresseur supporté disponible dans ce système (ffmpeg, avconv)');
+            }
         }
-        let sCommand = sFF || sAV;
         return new Promise((resolve, reject) => {
             let aArgsInput = [
                 '-stats',   // une indication de progression lors de la compression video
