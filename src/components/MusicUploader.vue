@@ -30,7 +30,7 @@
 </template>
 
 <script>
-    import * as types from '../store/types';
+    import * as types from '../store/action-types';
     import {mapGetters, mapActions} from 'vuex';
 
     export default {

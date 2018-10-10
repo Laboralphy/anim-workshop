@@ -44,7 +44,7 @@
 <script>
     import WebcamSurface from "./WebcamSurface.vue";
     import PhotoSurface from "./PhotoSurface.vue";
-    import * as types from "../store/types";
+    import * as types from "../store/action-types";
     import {mapActions} from 'vuex';
     import CreditEditor from "./CreditEditor.vue";
     import config from "../services/config";
@@ -67,10 +67,10 @@
         },
         methods: {
 
-            ...mapActions([
-                'addFrame',
-                'showAlert'
-            ]),
+            ...mapActions({
+                'addFrame': types.ADD_FRAME,
+                'showAlert': types.SHOW_ALERT
+            }),
 
             /**
              * Lance un effet spécial visuel de type "flash"

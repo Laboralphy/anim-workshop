@@ -45,7 +45,7 @@
 
 <script>
     import {mapGetters} from 'vuex';
-    import * as types from '../store/types';
+    import * as types from '../store/action-types';
     export default {
         name: "NameProjectDialog",
         computed: {

@@ -40,6 +40,7 @@
     import projectTree from "../services/project-tree";
     import NewConfirmDialog from "./NewConfirmDialog.vue";
     import config from '../services/config';
+    import * as types from '../store/action-types';
 
 
     export default {
@@ -78,11 +79,11 @@
 
         methods: {
 
-            ...mapActions([
-                'showAlert',
-                'importProject',
-                'uploadVideo'
-            ]),
+            ...mapActions({
+                'showAlert': types.SHOW_ALERT,
+                'importProject': types.IMPORT_PROJECT,
+                'uploadVideo': types.UPLOAD_VIDEO
+            }),
 
             /**
              * Affiche un snackbar, généralement pour indiquer qu'une opération

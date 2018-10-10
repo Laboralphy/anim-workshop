@@ -76,6 +76,7 @@
 
 <script>
     import {mapGetters, mapActions} from 'vuex';
+    import * as types from '../store/action-types';
     import projectTree from '../services/project-tree';
     import VideoUploader from '../services/video-uploader';
 
@@ -101,7 +102,7 @@
         },
 
         methods: {
-            ...mapActions(['uploadVideo']),
+            ...mapActions({'uploadVideo': types.UPLOAD_VIDEO}),
             transmit: function() {
                 if (!projectTree.getOutputFilename()) {
                     this.$emit('error', 'Video inexistante');

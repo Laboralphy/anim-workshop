@@ -1,4 +1,4 @@
-import * as types from './types';
+import * as types from './action-types';
 
 export default {
     [types.ADD_FRAME]: function({commit}, {data}) {

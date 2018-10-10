@@ -2,12 +2,12 @@
     <v-container>
         <v-layout row wrap>
             <v-flex xs12>
-                <v-text-field v-model.trim="title" label="Titre"></v-text-field>
+                <v-text-field @keypress.enter="$refs.o_credit_name.focus" v-model.trim="title" label="Titre"></v-text-field>
             </v-flex>
         </v-layout>
         <v-layout row wrap>
             <v-flex xs8>
-                <v-text-field v-model.trim="name" label="Crédit"></v-text-field>
+                <v-text-field ref="o_credit_name" @keypress.enter="add" v-model.trim="name" label="Crédit"></v-text-field>
             </v-flex>
             <v-flex xs4>
                 <v-btn flat color="success" @click="add">Ajouter</v-btn>
@@ -28,6 +28,7 @@
 
 <script>
     import {mapGetters, mapActions} from 'vuex';
+    import * as types from '../store/action-types';
 
     export default {
         name: "CreditEditor",
@@ -54,17 +55,20 @@
         },
 
         methods: {
-            ...mapActions([
-                'creditDeleteName',
-                'creditAddName',
-                'creditTitle'
-            ]),
+            ...mapActions({
+                'creditDeleteName': types.CREDIT_DELETE_NAME,
+                'creditAddName': types.CREDIT_ADD_NAME,
+                'creditTitle': types.CREDIT_TITLE
+            }),
             remove: function(name) {
                 this.creditDeleteName({name});
             },
 
             add: function() {
-                this.creditAddName({name: this.name});
+                let name = this.name;
+                if (!this.getVideoCredits().includes(name)) {
+                    this.creditAddName({name});
+                }
                 this.name = '';
             },
 

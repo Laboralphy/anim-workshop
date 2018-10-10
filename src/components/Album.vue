@@ -62,7 +62,7 @@
 
 <script>
     import {mapGetters, mapActions} from 'vuex';
-    import * as types from '../store/types';
+    import * as types from '../store/action-types';
     import DeleteConfirmDialog from "./DeleteConfirmDialog.vue";
 
     export default {
@@ -102,11 +102,11 @@
         },
         methods: {
 
-            ...mapActions([
-                types.SELECT_ALL_FRAMES,
-                types.UNSELECT_ALL_FRAMES,
-                types.SELECT_FRAME
-            ]),
+            ...mapActions({
+                selectAllFrames: types.SELECT_ALL_FRAMES,
+                unselectAllFrames: types.UNSELECT_ALL_FRAMES,
+                selectFrame: types.SELECT_FRAME
+            }),
 
             /**
              * on efface les photo sélectionnée, avec confirmation

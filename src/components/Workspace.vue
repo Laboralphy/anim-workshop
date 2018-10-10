@@ -21,11 +21,11 @@
 </template>
 
 <script>
-    import MovieMaker from '../services/project-manager';
     import Album from "./Album.vue";
     import Surfaces from "./Surfaces.vue";
     import {mapGetters, mapActions} from 'vuex';
     import MusicUploader from "./MusicUploader.vue";
+    import * as types from '../store/action-types';
     export default {
         name: "Workspace",
         components: {MusicUploader, Surfaces, Album},

@@ -16,6 +16,7 @@
 
 <script>
     import {mapGetters, mapActions} from 'vuex';
+    import * as types from '../store/action-types';
     export default {
         name: "Alerts",
         computed: {
