@@ -4,6 +4,7 @@
 const util = require('util');
 const fs = require('fs');
 const mkdirp = require('mkdirp');
+const path = require('path');
 
 const os = require('os');
 
@@ -62,13 +63,7 @@ class FsPlus {
      * @returns {Promise<any>}
      */
     b64fwrite(sFilename, dataB64) {
-        return new Promise((resolve, reject) => {
-            let ws = fs.createWriteStream(sFilename);
-            let oBinData = new Buffer(dataB64, 'base64');
-            ws.on('finish', () => resolve());
-            ws.write(oBinData);
-            ws.end();
-        });
+        return this.fwrite(sFilename, new Buffer(dataB64, 'base64'));
     }
 
     /**
@@ -78,12 +73,17 @@ class FsPlus {
      * @return {Promise<any>}
      */
     fwrite(sFilename, data) {
-        return new Promise((resolve, reject) => {
-            let ws = fs.createWriteStream(sFilename);
-            let oData = new Buffer(data);
-            ws.on('finish', () => resolve());
-            ws.write(oData);
-            ws.end();
+        return new Promise(async (resolve, reject) => {
+            try {
+                await this.mkdirp(path.dirname(sFilename));
+                let ws = fs.createWriteStream(sFilename);
+                let oData = Buffer.isBuffer(data) ? data : new Buffer(data);
+                ws.on('finish', () => resolve());
+                ws.write(oData);
+                ws.end();
+            } catch (err) {
+                reject(err);
+            }
         });
     }
 

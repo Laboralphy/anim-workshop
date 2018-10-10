@@ -11,16 +11,18 @@ Dépot GIT : https://github.com/Laboralphy/anim-workshop.git
 
 # Build et Exécution
 
-Pour installer les dépendances
+Pour l'instant le projet est en mode développement.
+Seuls des développeurs devraient pouvoir l'utiliser.
+Donc pour le tester (et faire des animations) voici la marche à suivre :
 ```
-git https://github.com/Laboralphy/anim-workshop.git
+git clone https://github.com/Laboralphy/anim-workshop.git
 cd anim-workshop
 npm install
 ```
 
 Pour construire le projet
 ```
-npm build
+npm run build
 ```
 
 Pour lancer le projet en mode développement
@@ -29,9 +31,11 @@ npm start
 ```
 
 # Outils connexes
-- ffmpeg ou avconv
-- ssh
+N'oubliez pas d'installer ffmpeg pour pouvoir générer des vidéo !
 
+# Configuration
+Lors de la première exécution le répertoire .anim-workshop est créé.
+A l'interieur de ce dossier, un fichier config.json est créé.
 
 # Comment faire un film ?
 

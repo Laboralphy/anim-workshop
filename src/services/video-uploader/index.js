@@ -16,7 +16,7 @@ class VideoUploader {
                 return;
             }
             let oCnx = config.upload;
-            let remoteFile = path.resolve(oCnx.remotePath, projectTree.getName() + '.mp4');
+            let remoteFile = oCnx.remotePath + '/' + projectTree.getName() + '.mp4';
             let sftp = new SFTPClient();
             await sftp.connect(oCnx);
             let nSize = await fsp.size(localFile);

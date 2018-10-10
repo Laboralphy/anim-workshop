@@ -1,6 +1,7 @@
 const cp = require('child_process');
 const path = require('path');
 const Events = require('events');
+const os = require('os');
 
 class VideoMaker {
 
@@ -17,16 +18,29 @@ class VideoMaker {
      */
     async _which(sCommand) {
         return new Promise((resolve, reject) => {
-            cp.exec('which ' + sCommand, (error, stdout, stderr) => {
-                if (error) {
-                    resolve(false);
-                }
-                if (stdout.length > 0 && stdout.includes(sCommand)) {
-                    resolve(sCommand)
-                } else {
-                    resolve(false);
-                }
-            });
+            if (this.isOSWindows()) {
+                cp.exec('where ' + sCommand, (error, stdout, stderr) => {
+                    if (error) {
+                        resolve(false);
+                    }
+                    if (stdout.length > 0 && stdout.includes(sCommand)) {
+                        resolve(stdout);
+                    } else {
+                        resolve(false);
+                    }
+                });
+            } else {
+                cp.exec('which ' + sCommand, (error, stdout, stderr) => {
+                    if (error) {
+                        resolve(false);
+                    }
+                    if (stdout.length > 0 && stdout.includes(sCommand)) {
+                        resolve(sCommand);
+                    } else {
+                        resolve(false);
+                    }
+                });
+            }
         });
     }
 
@@ -48,6 +62,10 @@ class VideoMaker {
         this._emitter.off(sEvent, pHandler);
     }
 
+    isOSWindows() {
+        return os.platform() === 'win32';
+    }
+
     /**
      * Création de la video
      * @param sInputFramePath {string} chemin des frame input
@@ -60,9 +78,19 @@ class VideoMaker {
         sInputMusicFilename,
         sOutputVideoFilename
     ) {
-        let sFF = await this._which('ffmpeg');
-        let sAV = await this._which('avconv');
-        let sCommand = sFF || sAV;
+        let bWindows = this.isOSWindows();
+        let sCommand;
+        if (bWindows) {
+            sCommand = 'ffmpeg';
+        } else {
+            if (await this._which('ffmpeg')) {
+                sCommand = 'ffmpeg';
+            } else if (await this._which('avconv')) {
+                sCommand = 'avconv';
+            } else {
+                throw new Error('pas de compresseur supporté disponible dans ce système (ffmpeg, avconv)');
+            }
+        }
         return new Promise((resolve, reject) => {
             let aArgsInput = [
                 '-stats',   // une indication de progression lors de la compression video
