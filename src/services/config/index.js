@@ -4,7 +4,7 @@ const projectTree = require('../project-tree');
 
 const CONFIG_FOUND = 0;
 const CONFIG_NOT_FOUND = 1;
-const CONFIG_INACCESSIBLE = 2;
+const CONFIG_PERM_DENIED = 2;
 const CONFIG_ERROR = 3;
 
 
@@ -35,7 +35,7 @@ function testConfigAccess(s) {
                 return CONFIG_NOT_FOUND;
 
             case 'EACCES':
-                return CONFIG_INACCESSIBLE;
+                return CONFIG_PERM_DENIED;
 
             default:
                 return CONFIG_ERROR;
@@ -59,7 +59,7 @@ function readConfig(s) {
 function main() {
     let s = projectTree.getConfigFilename();
     switch (testConfigAccess(s)) {
-        case CONFIG_INACCESSIBLE:
+        case CONFIG_PERM_DENIED:
             throw new Error('config.json : write permission denied');
 
         case CONFIG_NOT_FOUND:
