@@ -18,7 +18,7 @@
             <v-container>
                 <v-layout wrap>
                     <v-flex xs12>
-                        <v-text-field v-model="name" label="Nom du projet" required></v-text-field>
+                        <v-text-field @keypress.enter="confirmClicked" ref="o_project_name" v-model="name" label="Nom du projet" required></v-text-field>
                     </v-flex>
                 </v-layout>
             </v-container>
@@ -59,6 +59,14 @@
                 dialog: false,
                 name: ''
             };
+        },
+
+        watch: {
+            dialog: function(val) {
+                if (val) {
+                    this.$nextTick(() => this.$refs.o_project_name.focus());
+                }
+            }
         },
 
         methods: {

@@ -10,6 +10,14 @@ export default {
     frames: [], // liste de toutes les frames
     lastFrameId: 1, // dernier identifiant de frame attribué
     musicFile: false, // nom du fichier musical
+    title: '',
+    credits: [],
+
+    uploadingVideo: {
+        filename: '',
+        sent: 0,
+        size: 0,
+    },
 
     /**
      * chaque alerte dispose de ce format :

@@ -9,11 +9,15 @@
                 >
                     <v-tab :key="1" ripple>Caméra</v-tab>
                     <v-tab :key="2" ripple>Snapshot</v-tab>
+                    <v-tab :key="3" ripple>Credits</v-tab>
                     <v-tab-item :key="1">
-                        <WebcamSurface @error="wcsError" :class="flash ? 'flash' : ''" ref="o_wcs" res="480" aspect="4:3"></WebcamSurface>
+                        <WebcamSurface @error="wcsError" :class="flash ? 'flash' : ''" ref="o_wcs" :width="video.width" :height="video.height"></WebcamSurface>
                     </v-tab-item>
                     <v-tab-item :key="2">
                         <PhotoSurface :class="flash ? 'flash' : ''" ref="o_photo"></PhotoSurface>
+                    </v-tab-item>
+                    <v-tab-item :key="3">
+                        <CreditEditor ref="o_credits"></CreditEditor>
                     </v-tab-item>
                 </v-tabs>
             </v-flex>
@@ -42,18 +46,23 @@
     import PhotoSurface from "./PhotoSurface.vue";
     import * as types from "../store/types";
     import {mapActions} from 'vuex';
+    import CreditEditor from "./CreditEditor.vue";
+    import config from "../services/config";
 
     const TAB_WEBCAM = 0;
     const TAB_SNAPSHOT = 1;
+    const TAB_CREDITS = 2;
+
 
     export default {
         name: "Surfaces",
-        components: {PhotoSurface, WebcamSurface},
+        components: {CreditEditor, PhotoSurface, WebcamSurface},
         data: function() {
             return {
                 active: 0,
                 flash: '',
-                playing: false
+                playing: false,
+                video: config.video
             };
         },
         methods: {
@@ -132,6 +141,9 @@
             tabChanged: function() {
                 if (this.active !== TAB_SNAPSHOT) {
                     this.previewPause();
+                }
+                if (this.active === TAB_CREDITS) {
+                    this.$refs.o_credits.feed();
                 }
             }
         }
